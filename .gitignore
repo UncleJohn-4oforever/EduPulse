@@ -1,0 +1,36 @@
+.env
+.venv/
+.test-venv/
+.npm-cache/
+node_modules/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.tsbuildinfo
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+backups/
+exports/
+scratch-data/
+browser-tools/
+*.log
+*.pem
+*.key
+
+browser-test-data*/
+
+# Local runtime files and exports must never be published.
+.logs/
+logs/
+.env.*
+!.env.example
+*.csv
+*.xlsx
+*.zip
+*.bak
+# Local acceptance screenshots are kept on the workstation.
+docs/**/*.png
+docs/**/*.jpg
+docs/**/*.jpeg

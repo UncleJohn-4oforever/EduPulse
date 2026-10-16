@@ -1,0 +1,31 @@
+{
+  "base": "http://127.0.0.1:8065",
+  "findings": [
+    {
+      "id": "initial-expired-toast",
+      "confirmed": true,
+      "actual": "Fresh browser without any session receives a session-expired warning."
+    },
+    {
+      "id": "saved-auto-name-stale",
+      "confirmed": true,
+      "actual": {
+        "name": "周六一档",
+        "weekday": 3
+      }
+    },
+    {
+      "id": "advisory-failure-hides-classes",
+      "confirmed": true,
+      "actual": "GET classes succeeds with one class, but a 503 from schedule warnings leaves all classes and weekday navigation absent."
+    },
+    {
+      "id": "save-after-discard",
+      "confirmed": true,
+      "actual": "After confirming navigation and discarding changes, the delayed request still writes the new class."
+    }
+  ],
+  "additionalChecks": {
+    "failedSaveRetryPreservesStudentId": true
+  }
+}

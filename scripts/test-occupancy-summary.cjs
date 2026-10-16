@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict');
+const {buildSync}=require('../frontend/node_modules/esbuild');
+const output=buildSync({entryPoints:['frontend/src/OccupancySummary.tsx'],bundle:true,platform:'node',format:'cjs',jsx:'automatic',write:false}).outputFiles[0].text;
+const mod={exports:{}};new Function('module','exports','require',output)(mod,mod.exports,require);
+const {occupancyTotals,averageClassSize,classSizeText}=mod.exports;
+const a={groups:{1:{classes:1,seats:1,capacity:1},3:{classes:4,seats:5,capacity:12},6:{classes:9,seats:12,capacity:54}}};
+const b={groups:{1:{classes:0,seats:0,capacity:0},3:{classes:2,seats:3,capacity:6},6:{classes:0,seats:0,capacity:0}}};
+assert.deepEqual(occupancyTotals([a]),{three:{classes:4,seats:5,capacity:12},six:{classes:9,seats:12,capacity:54},combined:{classes:13,seats:17,capacity:66}});
+assert.equal(classSizeText(5,4),'1.25');assert.equal(classSizeText(12,9),'1.33');assert.equal(classSizeText(17,13),'1.31');
+assert.equal(classSizeText(0,0),'—');assert.equal(classSizeText(0,2),'0.00');assert.equal(averageClassSize(0,0),null);
+const all=occupancyTotals([a,b]);assert.deepEqual(all.combined,{classes:15,seats:20,capacity:72});assert.equal((all.combined.seats/all.combined.capacity*100).toFixed(2),'27.78');assert.equal(classSizeText(all.three.seats,all.three.classes),'1.33');
+assert.equal(occupancyTotals([]).combined.capacity,0);
+console.log('PASS: weighted rates, average students per class, aggregation, empty classes, absent types and exclusion of one-to-one.');

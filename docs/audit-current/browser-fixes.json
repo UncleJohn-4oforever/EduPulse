@@ -1,0 +1,31 @@
+{
+  "base": "http://127.0.0.1:8066",
+  "findings": [
+    {
+      "id": "initial-expired-toast",
+      "fixed": true,
+      "actual": "Fresh browser opens the login page without an erroneous session-expired warning."
+    },
+    {
+      "id": "saved-auto-name-stale",
+      "fixed": true,
+      "actual": {
+        "name": "周三一档",
+        "weekday": 3
+      }
+    },
+    {
+      "id": "advisory-failure-hides-classes",
+      "fixed": true,
+      "actual": "Advisory 503 is shown as unavailable; class and weekday navigation stay usable."
+    },
+    {
+      "id": "save-after-discard",
+      "fixed": true,
+      "actual": "Navigation and logout are blocked while saving; navigation succeeds only after save completes."
+    }
+  ],
+  "additionalChecks": {
+    "failedSaveRetryPreservesStudentId": true
+  }
+}

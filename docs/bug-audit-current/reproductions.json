@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "bug": "Campus filter excludes unassigned student profiles and inflates subject ratio",
+    "all_students": 2,
+    "filtered_students": 1,
+    "all_ratio": 0.5,
+    "filtered_ratio": 1
+  },
+  {
+    "id": 2,
+    "bug": "Failed filter request leaves old report visible under new subject selection",
+    "selected_subject": "英语",
+    "displayed_teacher_rows": 1,
+    "correct_teacher_rows": 0
+  },
+  {
+    "id": 3,
+    "bug": "A delayed comparison overwrites results after a new freeze changes the selected pair",
+    "selected_old_id": "2",
+    "selected_new_id": "3",
+    "displayed_result": "审计B → 审计A"
+  }
+]

@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const {transformSync}=require('../frontend/node_modules/esbuild');
+const output=transformSync(fs.readFileSync('frontend/src/apiErrors.ts','utf8'),{loader:'ts',format:'cjs'}).code;
+const mod={exports:{}};new Function('module','exports',output)(mod,mod.exports);
+const {apiErrorMessage}=mod.exports;
+assert.match(apiErrorMessage([{type:'extra_forbidden',loc:['body','name_is_manual'],msg:'Extra inputs are not permitted'}]),/旧版服务/);
+assert.match(apiErrorMessage([{type:'extra_forbidden',loc:['body','students',0,'unexpected'],msg:'Extra inputs are not permitted'}]),/学生.*第1项.*当前服务不支持/);
+assert.ok(!apiErrorMessage([{type:'extra_forbidden',loc:['body','name_is_manual'],msg:'Extra inputs are not permitted'}]).includes('Extra inputs'));
+assert.match(apiErrorMessage([{type:'missing',loc:['body','grade'],msg:'Field required'}]),/年级.*未填写/);
+assert.equal(apiErrorMessage('班级已更新'),'班级已更新');
+assert.equal(apiErrorMessage(null),'服务返回异常，请稍后重试');
+assert.equal(apiErrorMessage([null]),'服务返回异常，请稍后重试');
+console.log('PASS: old-backend mismatch, nested unknown fields, missing fields and malformed error responses have readable messages.');
