@@ -483,17 +483,17 @@
     "bytes": 47462,
     "sha256": "c97011c92706d8ae550ef702e62a304b5fe17166ffbf89431f341f1d0d38a88f"
   },
-  "frontend/dist/assets/index-BUSc_wYz.css": {
-    "bytes": 43440,
-    "sha256": "6ffb3c8bf1921cfbe59fe795867205fee163dbcca040b3906c31f053a1d9a95a"
+  "frontend/dist/assets/index-CHGUBD4A.js": {
+    "bytes": 277798,
+    "sha256": "6c8459978006ef653677ee0066d86c40029d28e0706e4a8c2e418a8ffb602eb8"
   },
-  "frontend/dist/assets/index-CW6D-MnK.js": {
-    "bytes": 279190,
-    "sha256": "69a3b235d3dfe4e542d5b2ce7e59178be60030b5eec6b230ae1e1c9eab564702"
+  "frontend/dist/assets/index-p0YHx9LE.css": {
+    "bytes": 46251,
+    "sha256": "0c70e37363d791433d07d159304718616c542d7b2890d7db6967c7d7b15d42aa"
   },
   "frontend/dist/index.html": {
     "bytes": 425,
-    "sha256": "897f06cc0d9bb8d1f9c5cf7eb1194f78e0bdbbc15077ce5476f7630c5e6cbd87"
+    "sha256": "66b8088d4975a2be44c945576a69e2718bde76a4f5b6145fd3158e556bd27384"
   },
   "frontend/index.html": {
     "bytes": 326,
@@ -524,8 +524,8 @@
     "sha256": "0eef799897a2726da308c4c4af80e0ef0bab3596400aa1c15202860d0f0ad786"
   },
   "frontend/src/OccupancySummary.tsx": {
-    "bytes": 2095,
-    "sha256": "d5e632fc4641d58639325fa2bd56db9ed100e1e60e991303160039c9b9aeb24e"
+    "bytes": 1799,
+    "sha256": "ad371a83010838074de9efd09755de6b9ceed8d5e3cb811f00c034f06f8711d5"
   },
   "frontend/src/Pagination.tsx": {
     "bytes": 1236,
@@ -556,12 +556,12 @@
     "sha256": "e24fea02574fd9170ffc5a17f7576e6c98aecc750741b6bbf277c2a6cbdba993"
   },
   "frontend/src/main.tsx": {
-    "bytes": 45394,
-    "sha256": "13111464fdadbea9d8cc851f6a9a39de0f6d7337163728df0a26af2f1e6ec536"
+    "bytes": 44659,
+    "sha256": "0e5535d4870fe72a103e47107eef8b6e1a791fa17c17d7c931829ab3c346ef08"
   },
   "frontend/src/style.css": {
-    "bytes": 42261,
-    "sha256": "e675d5bb51b3b15a1eec3250a8e57c54d44fa43358e75f2203c9aa7fe0158730"
+    "bytes": 45406,
+    "sha256": "0d36ea3cc0c5fed2f8dcda2b6c01272099650ab4d2c7c072e9dfa4e20942770a"
   },
   "frontend/tailwind.config.js": {
     "bytes": 94,

@@ -18,7 +18,6 @@ export function OccupancyValue({value,seats,classes}:{value:number|null;seats:nu
 export function OccupancySummary({teachers}:{teachers:Teacher[]}){
  const totals=occupancyTotals(teachers);
  return <section className="occupancy-overview" aria-label="小班满班率与班容">
-  <div className="occupancy-heading"><h2>小班满班率与班容</h2><span>综合按容量加权 · 不含一对一</span></div>
   <div className="occupancy-metrics">{[
    {key:'three',label:'一对三满班率',data:totals.three},
    {key:'six',label:'一对六满班率',data:totals.six},
@@ -27,6 +26,5 @@ export function OccupancySummary({teachers}:{teachers:Teacher[]}){
    <h3>{label}</h3><OccupancyValue value={data.capacity?data.seats/data.capacity:null} seats={data.seats} classes={data.classes}/>
    <p>{data.seats} 席位 / {data.capacity} 总容量 · {data.classes} 个班</p>
   </div>)}</div>
-  <div className="occupancy-explanation">班容 = 学生席位 ÷ 班级数，表示平均每班人数；空班计入，没有对应班型时显示“—”。</div>
  </section>;
 }
