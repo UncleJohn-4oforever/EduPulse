@@ -27,6 +27,8 @@ def main():
             version=check.execute('SELECT MAX(version) FROM schema_versions').fetchone()[0]
             if not version or version>SCHEMA_VERSION:parser.error('备份数据库版本不受支持')
             for table in Base.metadata.sorted_tables:
+                # Older backups predate the optional workspace display name.
+                if table.name=='workspace_settings' and table.name not in tables:continue
                 if version<5 and table.name=='frozen_records':continue
                 if version<3 and table.name=='student_weekly_slots':continue
                 columns={row[1] for row in check.execute(f'PRAGMA table_info("{table.name}")')}

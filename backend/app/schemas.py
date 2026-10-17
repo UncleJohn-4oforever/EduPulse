@@ -27,6 +27,8 @@ class TeacherImport(Strict):
 class DictIn(Strict):
     kind: Literal['campus','subject','grade']
     name: str=Field(min_length=1,max_length=40)
+class CampusNameIn(Strict):
+    campus_name: str=Field(min_length=1,max_length=40)
 class StudentIn(Strict):
     display_name: str=Field(min_length=1,max_length=80)
     grade: str=Field(min_length=1,max_length=40)

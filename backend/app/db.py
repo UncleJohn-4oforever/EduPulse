@@ -16,6 +16,11 @@ def pragmas(conn, _):
 SessionLocal = sessionmaker(engine, expire_on_commit=False)
 def now(): return datetime.now(timezone.utc).isoformat()
 class Base(DeclarativeBase): pass
+class WorkspaceSettings(Base):
+    __tablename__='workspace_settings'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    campus_name: Mapped[str] = mapped_column(String(40))
+    __table_args__=(CheckConstraint('id = 1'),)
 class Dictionary(Base):
     __tablename__='dictionaries'
     id: Mapped[int] = mapped_column(primary_key=True)

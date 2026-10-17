@@ -145,7 +145,18 @@ def logout(request:Request,response:Response,user=Depends(current_user),db=Depen
     return {'ok':True}
 @app.get('/api/dictionaries')
 def dictionaries(user=Depends(current_user),db=Depends(get_db)):
-    return {k:[{'id':d.id,'name':d.name} for d in db.query(Dictionary).filter_by(kind=k).filter(Dictionary.deleted_at.is_(None)).order_by(Dictionary.id)] for k in ('campus','subject','grade')} | {'archived':{k:[{'id':d.id,'name':d.name} for d in db.query(Dictionary).filter_by(kind=k).filter(Dictionary.deleted_at.is_not(None)).order_by(Dictionary.id)] for k in ('campus','subject','grade')}}
+    settings=db.get(WorkspaceSettings,1)
+    return {'campus_name':settings.campus_name if settings else ''} | {k:[{'id':d.id,'name':d.name} for d in db.query(Dictionary).filter_by(kind=k).filter(Dictionary.deleted_at.is_(None)).order_by(Dictionary.id)] for k in ('campus','subject','grade')} | {'archived':{k:[{'id':d.id,'name':d.name} for d in db.query(Dictionary).filter_by(kind=k).filter(Dictionary.deleted_at.is_not(None)).order_by(Dictionary.id)] for k in ('campus','subject','grade')}}
+@app.patch('/api/admin/settings/campus-name')
+async def update_campus_name(body:CampusNameIn,user=Depends(admin),db=Depends(get_db)):
+    write(db)
+    settings=db.get(WorkspaceSettings,1)
+    if settings:settings.campus_name=body.campus_name
+    else:db.add(WorkspaceSettings(id=1,campus_name=body.campus_name))
+    audit(db,user,'settings.campus_name.update','workspace_settings',1)
+    db.commit()
+    await notify('settings.updated')
+    return {'campus_name':body.campus_name}
 @app.post('/api/admin/dictionaries')
 def create_dictionary(body:DictIn,user=Depends(admin),db=Depends(get_db)):
     write(db); d=db.query(Dictionary).filter_by(kind=body.kind,name=body.name).first()
