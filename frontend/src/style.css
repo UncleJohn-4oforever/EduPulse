@@ -685,10 +685,10 @@ td:first-child { min-width: 180px; }
 .report-workspace .occupancy-metric p { margin-top: 4px; font-size: 13px; }
 .report-workspace .report-secondary { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; margin-top: 10px; }
 .report-workspace .report-secondary:first-child { margin-top: 0; }
-.report-workspace .report-secondary .stat-card { padding: 10px 14px; }
-.report-workspace .report-secondary .stat-card>strong { font-size: 24px; margin: 2px 0 0; }
-.report-workspace .report-secondary .stat-card small { display: none; }
-.report-workspace .report-secondary .stat-icon { display: none; }
+.report-workspace .report-secondary .stat-card { padding: 12px 14px; }
+.report-workspace .report-secondary .stat-card>strong { font-size: 28px; margin: 6px 0 4px; }
+.report-workspace .report-secondary .stat-card small { display: block; font-size: 13px; }
+.report-workspace .report-secondary .stat-icon { width: 28px; height: 28px; }
 .report-workspace .insights { grid-template-columns: 1fr; }
 .report-workspace .panel { padding: 16px; margin-bottom: 14px; }
 .report-workspace .section-title { margin-bottom: 12px; }
@@ -705,4 +705,5 @@ td:first-child { min-width: 180px; }
  .report-toolbar.filters select { flex: 1 1 130px; max-width: none; }
  .report-exports { margin-left: 0; }
  .report-workspace .report-secondary { grid-template-columns: repeat(2,minmax(0,1fr)); }
+ .report-workspace .report-secondary .stat-card { display: block; }
 }
