@@ -79,7 +79,7 @@ def test_existing_grade_student_and_teacher_filter_contracts_stay_unchanged():
     assert all(d['teacher_id'] == teachers[0][0]['id'] for s in filtered['students'] for d in s['details'])
     assert next(s for s in filtered['students'] if s['id'] == a)['subject_count'] == 1
     wb = load_workbook(BytesIO(admin.get('/api/admin/reports/export.xlsx', params={'grade': other_grade, 'search_type': 'student'}).content))
-    assert wb['教师周负荷'].max_row == 3
+    assert wb['教师周课量'].max_row == 3
     assert wb['学生科目教师评价明细'].max_row == 2
 
 

@@ -10,7 +10,7 @@ const base=process.env.EDUPULSE_TEST_URL||'http://127.0.0.1:8074';
   await p.goto(base);await p.getByLabel('登录账号',{exact:true}).fill('browser-admin');await p.getByLabel('密码',{exact:true}).fill('BrowserTestOnly2026');await p.getByRole('button',{name:'进入工作台'}).click();await p.locator('.sidebar').waitFor();
   assert.equal(await p.getByRole('button',{name:/导出/}).count(),0);
   fs.mkdirSync('browser-test-data-export-downloads',{recursive:true});
-  for(const [name,view] of [['教师满班率','occupancy'],['教师负荷','workload'],['学生列表','students']]){
+  for(const [name,view] of [['教师满班率','occupancy'],['教师周课量','workload'],['学生列表','students']]){
    await p.getByRole('button',{name,exact:true}).click();await p.getByLabel('每页显示条数').selectOption('10');
    if(view==='students'){await p.getByLabel('学生排序').selectOption('subjects-desc');await p.locator('.student-detail').first().waitFor()}
    for(const ext of ['xlsx','png']){

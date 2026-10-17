@@ -15,7 +15,7 @@ def safe(v):
 def slot_text(slots):
     return '；'.join(f"周{'一二三四五六日'[s['weekday']-1]} {s['slot_label']}"+(f" {s['start_time']}-{s['end_time']}" if s['start_time'] else '') for s in slots)
 def workload_note(data):
-    return '周负荷按学生档位在同班、同星期、同档位去重' if data.get('workload_basis')=='student-slot-union' else '周负荷按旧版班级固定时段数'
+    return '周课量按学生档位在同班、同星期、同档位去重' if data.get('workload_basis')=='student-slot-union' else '周课量按旧版班级固定时段数'
 def legacy_xlsx(data):
     wb=Workbook(); wb.remove(wb.active)
     def sheet(name,headers,rows,percentage_columns=()):
@@ -36,7 +36,7 @@ def legacy_xlsx(data):
             g=t['groups'][cap]; row.extend([g['classes'],g['seats'],g['capacity'],g['rate'] if g['rate'] is not None else 'N/A',g['vacancies']])
         row.extend([t['small_rate'] if t['small_rate'] is not None else 'N/A',t.get('confirmation','当前数据')]); rows.append(row)
     sheet('教师满班率',['教师','账号','校区','一对一班数','一对三班数','一对三席位','一对三容量','一对三满班率','一对三空位','一对六班数','一对六席位','一对六容量','一对六满班率','一对六空位','小班综合满班率','本轮确认'],rows,(8,13,15))
-    sheet('教师周负荷',['教师','校区','一对一周课次','一对三周课次','一对六周课次','总周课次','班级数'],[[t['display_name'],t['campus'],*[t['groups'][str(c)]['weekly_lessons'] for c in (1,3,6)],t['weekly_lessons'],t['class_count']] for t in data['teachers']])
+    sheet('教师周课量',['教师','校区','一对一周课次','一对三周课次','一对六周课次','总周课次','班级数'],[[t['display_name'],t['campus'],*[t['groups'][str(c)]['weekly_lessons'] for c in (1,3,6)],t['weekly_lessons'],t['class_count']] for t in data['teachers']])
     sheet('学生科目教师评价明细',['学生编号','姓名','年级','去重科目数','科目','任课教师','班级','校区','程度','文字评价','评价更新时间','该生上课档位'],[[s['id'],s['display_name'],s['grade'],s['subject_count'],d['subject'],d['teacher'],d['class_name'],d['campus'],d['level'],d['note'],local(d['updated_at']),slot_text(d.get('weekly_slots',[]))] for s in data['students'] for d in s['details']])
     sheet('班级明细',['班级编号','教师','名称','科目','年级','容量','学生席位','每周课次','时段'],[[c['id'],t['display_name'],c['display_name'],c['subject'],c['grade'],c['capacity'],len(c['students']),len(c['weekly_slots']),'；'.join(f"周{'一二三四五六日'[s['weekday']-1]} {s['slot_label']} {s['start_time'] or ''}-{s['end_time'] or ''}" for s in c['weekly_slots'])] for t in data['teachers'] for c in t['classes']])
     progress=data.get('broadcast',{}).get('targets',[])
@@ -72,7 +72,7 @@ def legacy_png(data):
     out=BytesIO(); image.save(out,format='PNG'); return out.getvalue()
 
 
-VIEW_NAMES={'occupancy':'教师满班率','workload':'教师负荷','students':'学生列表'}
+VIEW_NAMES={'occupancy':'教师满班率','workload':'教师周课量','students':'学生列表'}
 
 def average(seats,classes):
     return seats/classes if classes else None
@@ -85,7 +85,7 @@ def page_tables(data,view):
         return [('学生列表',['学生编号','姓名','年级','去重科目数','科目','关联班级数'],overview,(),()),('学生评价与档位明细',['学生编号','姓名','年级','去重科目数','科目','任课教师','班级','校区','程度','文字评价','评价更新时间','该生上课档位'],details,(),())]
     if view=='workload':
         rows=[[t['display_name'],t['username'],t['campus'],*[t['groups'][str(c)]['weekly_lessons'] for c in (1,3,6)],t['weekly_lessons'],15,f"{t['weekly_lessons']}/15",t['weekly_lessons']/15,t['class_count'],t.get('confirmation','当前数据')] for t in data['teachers']]
-        return [('教师负荷',['教师','账号','校区','一对一周课次','一对三周课次','一对六周课次','总周课次','基准课次','本周课次/基准','负荷率','班级数','本轮核对'],rows,(10,),())]
+        return [('教师周课量',['教师','账号','校区','一对一周课次','一对三周课次','一对六周课次','总周课次','基准课次','本周课次/基准','周课量占比','班级数','本轮核对'],rows,(10,),())]
     rows=[]
     for t in data['teachers']:
         row=[t['display_name'],t['username'],t['campus'],t['groups']['1']['classes'],t['groups']['1']['weekly_lessons']]
@@ -113,7 +113,7 @@ def xlsx(data,view='all'):
         ['导出页面',VIEW_NAMES[view]],['导出范围','当前筛选下的全部记录（包含翻页后的记录）'],
         ['生成时间（北京时间）',local(data['generated_at'])],['校区',scope.get('campus_label','全部校区')],['科目',scope.get('subject_label','全部科目')],
         ['筛选条件',str(scope)],['数据来源',data.get('broadcast',{}).get('title','当前实时数据')],
-        ['口径','小班满班率按容量加权，不含一对一；班容=席位÷班级数；负荷率=本周课次÷15，可超过100%；'+workload_note(data)+'；学生科目去重。']],(),()))
+        ['口径','小班满班率按容量加权，不含一对一；班容=席位÷班级数；周课量占比=本周课次÷15，可超过100%；'+workload_note(data)+'；学生科目去重。']],(),()))
     for name,headers,rows,percentages,decimals in tables:
         ws=wb.create_sheet(name);ws.append(headers)
         for row in rows:ws.append([safe(v) if v is not None else '—' for v in row])
@@ -139,7 +139,7 @@ def png(data,view='all'):
         widths=[110,190,180,120,360,440];headers=['编号','姓名','年级','科目数','科目','任课教师 / 班级']
         rows=[[str(s['id']),s['display_name'],s['grade'],str(s['subject_count']),' / '.join(s['subjects']),'；'.join(f"{d['teacher']} · {d['class_name']}" for d in s['details']) or '尚未关联班级'] for s in data['students']]
     elif view=='workload':
-        widths=[260,170,170,170,190,160,120,160];headers=['教师 / 校区','一对一周课次','一对三周课次','一对六周课次','本周课次 / 15','负荷率','班级数','本轮核对']
+        widths=[260,170,170,170,190,160,120,160];headers=['教师 / 校区','一对一周课次','一对三周课次','一对六周课次','本周课次 / 15','周课量占比','班级数','本轮核对']
         rows=[[t['display_name']+' / '+t['campus'],*[str(t['groups'][str(c)]['weekly_lessons']) for c in (1,3,6)],f"{t['weekly_lessons']}/15",rate(t['weekly_lessons']/15),str(t['class_count']),t.get('confirmation','当前数据')] for t in data['teachers']]
     else:
         widths=[260,180,300,300,300,130,160];headers=['教师 / 校区','一对一 班 / 周次','一对三 满班率 · 班容','一对六 满班率 · 班容','综合满班率 · 班容','小班空位','本轮核对']
@@ -171,5 +171,5 @@ def png(data,view='all'):
         for cell,w in zip(row,widths):draw.multiline_text((x,y+10),'\n'.join(cell),font=small,spacing=6,fill='#243e39');x+=w
         y+=h
     if not rows:draw.text((45,y+10),'暂无符合条件的数据',font=small,fill='#334155')
-    draw.text((35,height-38),'班容=席位÷班级数；小班按容量加权；负荷=本周课次÷15，可超过100%；学生科目去重。',font=small,fill='#475569')
+    draw.text((35,height-38),'班容=席位÷班级数；小班按容量加权；周课量占比=本周课次÷15，可超过100%；学生科目去重。',font=small,fill='#475569')
     out=BytesIO();image.save(out,format='PNG');return out.getvalue()

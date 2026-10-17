@@ -17,7 +17,7 @@ const base=process.env.EDUPULSE_TEST_URL||'http://127.0.0.1:8054';
    rooms.push(await api(t,'/teacher/classes','POST',{display_name:name,subject_id:d.subject[0].id,grade:d.grade[0].name,capacity:3,students:[{student_id:s.id,level:'B',note:'',weekly_slots:[{weekday:3,slot_number:number,start_time:start,end_time:end}]}]}));
   }
   await t.reload();await t.locator('.schedule-warnings summary').click();await t.getByText('时间重叠',{exact:true}).waitFor();
-  await a.getByRole('button',{name:'教师负荷',exact:true}).click();const row=a.locator('tr').filter({hasText:'虚构撞档验证教师'}).first();await row.locator('.schedule-warnings summary').click();await row.getByText('时间重叠',{exact:true}).waitFor();
+  await a.getByRole('button',{name:'教师周课量',exact:true}).click();const row=a.locator('tr').filter({hasText:'虚构撞档验证教师'}).first();await row.locator('.schedule-warnings summary').click();await row.getByText('时间重叠',{exact:true}).waitFor();
   assert.ok((await row.locator('.schedule-warnings').innerText()).includes('撞档验证甲班'));assert.ok((await row.locator('.schedule-warnings').innerText()).includes('撞档验证乙班'));
   const bid=(await api(a,'/admin/broadcasts','POST',{title:'虚构历史核对',starts_at:new Date(Date.now()-60000).toISOString(),deadline_at:new Date(Date.now()+3600000).toISOString(),teacher_ids:[u.id]})).id;
   await a.locator('.broadcast-strip').waitFor();await api(a,`/admin/broadcasts/${bid}/close`,'POST');await a.locator('.broadcast-strip').waitFor({state:'hidden'});

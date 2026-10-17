@@ -36,8 +36,8 @@ def test_exports_match_page_filters_order_and_current_metrics():
     c=t.get('/api/teacher/classes').json()[0];body=body_of(c)
     for member in body['students']:member['weekly_slots']=[{'weekday':i//6+1,'slot_number':i%6+1} for i in range(17)]
     assert t.patch(f"/api/teacher/classes/{c['id']}",json=body).status_code==200
-    wb=workbook(a,'view=workload');assert set(wb.sheetnames)=={'教师负荷','统计说明'}
-    ws=wb['教师负荷'];assert ws['G2'].value==18 and ws['I2'].value=='18/15' and ws['J2'].value==1.2
+    wb=workbook(a,'view=workload');assert set(wb.sheetnames)=={'教师周课量','统计说明'}
+    ws=wb['教师周课量'];assert ws['G2'].value==18 and ws['I2'].value=='18/15' and ws['J2'].value==1.2
     assert ws['J2'].number_format=='0.00%'
     for view in ('occupancy','workload','students'):
         r=a.get('/api/admin/reports/export.png?view='+view);assert r.status_code==200

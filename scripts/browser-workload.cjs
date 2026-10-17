@@ -14,9 +14,9 @@ const base=process.env.EDUPULSE_TEST_URL||'http://127.0.0.1:8073';
   const dict=await api(admin,'/dictionaries'),campus=dict.campus[0].id,subject=dict.subject[0].id;
   const u=await api(admin,'/admin/teachers','POST',{display_name:'负荷演示教师',campus_id:campus});
   const pw=await api(admin,`/admin/teachers/${u.id}/issue-password`,'POST');await login(teacher,pw.username,pw.password);
-  await admin.getByRole('button',{name:'教师负荷',exact:true}).click();
+  await admin.getByRole('button',{name:'教师周课量',exact:true}).click();
   async function check(n,pct){await admin.waitForFunction(({n,pct})=>{const el=document.querySelector('.workload-value');return el?.querySelector('strong')?.textContent===`${n}/15`&&el?.querySelector('span')?.textContent===pct},{n,pct})}
-  async function refresh(n,pct){await admin.reload();await admin.getByRole('button',{name:'教师负荷',exact:true}).click();await check(n,pct)}
+  async function refresh(n,pct){await admin.reload();await admin.getByRole('button',{name:'教师周课量',exact:true}).click();await check(n,pct)}
   await check(0,'0.00%');
   let serial=0;
   async function room(cap,count,memberCount=1){const students=[];for(let i=0;i<memberCount;i++){const s=await api(teacher,'/students','POST',{display_name:`负荷虚构学生${++serial}`,grade:'高一',campus_id:campus});students.push({student_id:s.id,level:'B',note:'',weekly_slots:Array.from({length:count},(_,j)=>({weekday:Math.floor(j/6)+1,slot_number:j%6+1}))})}return api(teacher,'/teacher/classes','POST',{display_name:`负荷演示班${serial}`,subject_id:subject,capacity:cap,students})}

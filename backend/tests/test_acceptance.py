@@ -120,7 +120,7 @@ def test_broadcast_progress_frozen_targets_offline_snapshot_exports():
     b2=broadcast(a,campus,[ts[0][0]['id']]); assert t.post(f'/api/broadcasts/{b2}/confirm').status_code==200
     assert a.get(f'/api/admin/broadcasts/{b}/snapshot').json()==snapshot
     output=a.get(f'/api/admin/reports/export.xlsx?broadcast_id={b}'); assert output.status_code==200
-    wb=load_workbook(BytesIO(output.content)); assert {'教师满班率','教师周负荷','学生科目教师评价明细'}<=set(wb.sheetnames)
+    wb=load_workbook(BytesIO(output.content)); assert {'教师满班率','教师周课量','学生科目教师评价明细'}<=set(wb.sheetnames)
     assert wb['教师满班率']['H2'].number_format=='0.00%'; assert isinstance(wb['教师满班率']['H2'].value,float)
     output=a.get(f'/api/admin/reports/export.png?broadcast_id={b}'); assert output.status_code==200
     assert Image.open(BytesIO(output.content)).size[0]==1500
