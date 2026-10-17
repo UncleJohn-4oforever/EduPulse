@@ -8,8 +8,8 @@
     "sha256": "aa7b9cea04195d891a2f2c4dd0a81ce0765325b62c1c2ea2a33b31ee17315fa9"
   },
   "README.md": {
-    "bytes": 13961,
-    "sha256": "b70b1ce242a413e213959112b198279b33dd73bc8ad9820d87cfad3159f30329"
+    "bytes": 14369,
+    "sha256": "c0f6ab80ab79b470ebeff00a453faa1b697116516c610bc5a693d0ce2705b298"
   },
   "backend/app/__init__.py": {
     "bytes": 0,
@@ -483,17 +483,17 @@
     "bytes": 47462,
     "sha256": "c97011c92706d8ae550ef702e62a304b5fe17166ffbf89431f341f1d0d38a88f"
   },
-  "frontend/dist/assets/index-BKtiEJ69.js": {
-    "bytes": 277765,
-    "sha256": "aff7c7768fd6760418acd45345408ff9368f8739831ea02da93a446d438d4e57"
+  "frontend/dist/assets/index-CQrxOf4H.css": {
+    "bytes": 58113,
+    "sha256": "fcc7709ea35635070b1b327c698b8b5ad034e742deab53bf3131ef3610f5dcb8"
   },
-  "frontend/dist/assets/index-CBIQD2Br.css": {
-    "bytes": 46353,
-    "sha256": "e06d6b58108dc25587c58d2896d83b69920ad2062a507a430d1cec714058bd65"
+  "frontend/dist/assets/index-DLE7viJe.js": {
+    "bytes": 281106,
+    "sha256": "7fb3a1ead99fa80cd57f95197d6cde51c3fc866e101bd3776444bdf47813db36"
   },
   "frontend/dist/index.html": {
     "bytes": 425,
-    "sha256": "6f25af79c3f6cf9f7e5e198b11c5b8fb72c820a98d0069e03b68597bcafad7db"
+    "sha256": "5f1a15813ab36697e55f77bb84671e0625223e27f6f2e9220b188d1a45437cdd"
   },
   "frontend/index.html": {
     "bytes": 326,
@@ -510,6 +510,10 @@
   "frontend/postcss.config.js": {
     "bytes": 59,
     "sha256": "9199a4d20e13f66b8be9a348af182f4d14805b93b315db19f95be8432cd8301b"
+  },
+  "frontend/src/AppearanceSettings.tsx": {
+    "bytes": 1888,
+    "sha256": "d5e7e4c264ce20bc68db83d8d8fefb4da764687d207c70a769852518768a1677"
   },
   "frontend/src/DuplicateStudents.tsx": {
     "bytes": 4675,
@@ -551,13 +555,17 @@
     "bytes": 1461,
     "sha256": "090c375133021770c81f4944125da61485d84c86bd822a9fbf6de2c881b8a4f4"
   },
+  "frontend/src/appearance.css": {
+    "bytes": 12979,
+    "sha256": "d972179703fc533b5c5e1abcd0d33b41eacc2558f1fb8cb1eafc89ae3d6e17ee"
+  },
   "frontend/src/classDefaults.ts": {
     "bytes": 1272,
     "sha256": "e24fea02574fd9170ffc5a17f7576e6c98aecc750741b6bbf277c2a6cbdba993"
   },
   "frontend/src/main.tsx": {
-    "bytes": 44616,
-    "sha256": "f4e542060854cd3b60c0ee12f70a3beffcaad21b94bdcb7c1dc10cfaa74acf44"
+    "bytes": 45370,
+    "sha256": "de2b92441b17d835f4d1caf5286f66c881562778bab07a24b81b73fd1d5ed5f9"
   },
   "frontend/src/style.css": {
     "bytes": 45507,
@@ -590,6 +598,10 @@
   "scripts/audit-current-bugs.cjs": {
     "bytes": 6300,
     "sha256": "9ac47af5852f516cd238b1d1b5406fb70fbd3e96f028e4db68d4cc14ce55f2c6"
+  },
+  "scripts/browser-appearance.cjs": {
+    "bytes": 5897,
+    "sha256": "d6ce90e6b939339d1b54bb6832832cd78980f1e27d4fc56d65044a316f29021c"
   },
   "scripts/browser-bug-audit.cjs": {
     "bytes": 7457,

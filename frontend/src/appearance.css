@@ -1,0 +1,110 @@
+/* Local theme previews also show both choices against either workspace theme. */
+.appearance-settings .section-title { margin-bottom: 14px; }
+.appearance-settings .help { margin: 5px 0 0; }
+.theme-options { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.theme-choice { position: relative; display: block; min-width: 0; padding: 12px; margin: 0; border: 1px solid #c9d8d0; border-radius: 9px; cursor: pointer; background: #f8faf9; transition: border-color .15s, box-shadow .15s; }
+.theme-choice:hover { border-color: #609386; }
+.theme-choice.selected { border: 2px solid #0f766e; padding: 11px; box-shadow: 0 0 0 2px #0f766e0a; }
+.theme-choice:focus-within { outline: 3px solid #0f766e; outline-offset: 3px; }
+.theme-choice>input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.theme-choice-title { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 16px; }
+.theme-selected { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; color: #0f766e; font-size: 12px; white-space: nowrap; }
+.theme-description { display: block; font-size: 13px; font-weight: 400; color: #52655e; margin-top: 5px; }
+.theme-preview { display: flex; height: 128px; border-radius: 5px; overflow: hidden; border: 1px solid var(--preview-line); background: var(--preview-bg); --preview-bg:#eef5f1; --preview-nav:#fff; --preview-panel:#fff; --preview-ink:#177365; --preview-line:#d1e1d8; }
+.preview-warcraft { --preview-bg:#161d23; --preview-nav:#12171d; --preview-panel:#232b31; --preview-ink:#e6c577; --preview-line:#665338; background-image: radial-gradient(ellipse at top right,#b18b3b25,transparent 70%); }
+.preview-nav { display: flex; flex-direction: column; gap: 11px; width: 18%; padding: 16px 9px; border-right: 1px solid var(--preview-line); background: var(--preview-nav); }
+.preview-nav i { height: 4px; background: var(--preview-line); border-radius: 1px; }
+.preview-nav i:first-child { background: var(--preview-ink); height: 7px; margin-bottom: 4px; }
+.preview-content { flex: 1; padding: 12px; min-width: 0; }
+.preview-bar { display: block; height: 9px; width: 45%; background: var(--preview-line); margin-bottom: 10px; }
+.preview-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+.preview-metrics>i { background: var(--preview-panel); border: 1px solid var(--preview-line); color: var(--preview-ink); padding: 6px; font-size: 19px; font-style: normal; font-weight: 650; }
+.preview-metrics small { display: inline; font: 9px sans-serif; color: var(--preview-ink); margin-left: 2px; }
+.preview-table { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
+.preview-table i { height: 3px; background: var(--preview-line); }
+
+/* Warcraft-inspired bronze and stone, scoped to authenticated supervisors. */
+:root[data-admin-theme="warcraft"] { color-scheme: dark; background: #141a20; color: #e6e0d2; --epic-gold:#e7c57b; --epic-muted:#b8b7ac; --epic-line:#524b3c; --epic-panel:#202930; }
+:root[data-admin-theme="warcraft"] body { background: #141a20; }
+:root[data-admin-theme="warcraft"] .app { background: radial-gradient(ellipse at 80% 0,#a8803520,transparent 50%), repeating-linear-gradient(117deg,#ffffff02 0 1px,transparent 1px 6px),#171e25; }
+:root[data-admin-theme="warcraft"] .sidebar { background: linear-gradient(90deg,#11171d,#1c242b 88%,#12171b); border-right: 1px solid #6b5734; box-shadow: 4px 0 20px #0004; }
+:root[data-admin-theme="warcraft"] .brand { color: #f0d28c; font-family: Georgia,'Songti SC',SimSun,serif; text-shadow: 0 2px 3px #000; }
+:root[data-admin-theme="warcraft"] .brand-icon { color: #f3d692; background: linear-gradient(145deg,#827046,#3c3526); border: 1px solid #ba9450; border-radius: 7px 7px 12px 12px; box-shadow: inset 0 1px #f8db9960,0 3px 8px #0007; }
+:root[data-admin-theme="warcraft"] .brand small { color: #adab9d; letter-spacing: 2px; }
+:root[data-admin-theme="warcraft"] .nav-caption { color: #9e947e; letter-spacing: 3px; font-size: 12px; }
+:root[data-admin-theme="warcraft"] .nav-item { background: transparent; box-shadow: none; color: #c5c6be; border: 1px solid transparent; border-radius: 4px; }
+:root[data-admin-theme="warcraft"] .nav-item:hover { background: #d6b35f0c; color: #f1d99c; border-color: #8a704542; }
+:root[data-admin-theme="warcraft"] .nav-item.active { color: #f3d78c; background: linear-gradient(90deg,#8f6b342f,#69543112); border: 1px solid #81683e; box-shadow: inset 3px 0 #cba15a,inset 0 1px #e5bd5a12; }
+:root[data-admin-theme="warcraft"] .nav-item.active::after { background: #edc36c; transform: rotate(45deg); border-radius: 0; box-shadow: 0 0 8px #efc46b55; }
+:root[data-admin-theme="warcraft"] .profile { border-color: var(--epic-line); }
+:root[data-admin-theme="warcraft"] :is(.avatar,.avatar.light) { color: #f0d08a; background: #514531; border: 1px solid #806a42; }
+:root[data-admin-theme="warcraft"] .topbar { background: linear-gradient(180deg,#283037,#1c252b); border-bottom: 1px solid #6e5b3b; color: #e6c98c; box-shadow: 0 2px 10px #0003; }
+:root[data-admin-theme="warcraft"] :is(h1,h2,h3) { color: #e8cb8e; }
+:root[data-admin-theme="warcraft"] :is(.page-title h1,.section-title h2,.panel>h2) { font-family: Georgia,'Songti SC',SimSun,serif; letter-spacing: .5px; text-shadow: 0 1px 2px #0009; }
+:root[data-admin-theme="warcraft"] :is(p,small,.muted,.help,label,.connection,.page-title p,.report-notes,.theme-description) { color: var(--epic-muted); }
+:root[data-admin-theme="warcraft"] strong { color: #ece5d5; }
+:root[data-admin-theme="warcraft"] :is(.panel,.stat-card,.occupancy-overview,.modal) { background: linear-gradient(135deg,#283138,#20282f 60%); border: 1px solid #655438; border-radius: 6px; box-shadow: inset 0 1px #b4a17814,0 3px 12px #0003; }
+:root[data-admin-theme="warcraft"] .occupancy-overview { border-color: #8c7044; position: relative; }
+:root[data-admin-theme="warcraft"] .occupancy-overview::before { content: ''; position: absolute; height: 2px; left: 15%; right: 15%; top: 0; background: linear-gradient(90deg,transparent,#e3c27c,transparent); pointer-events: none; }
+:root[data-admin-theme="warcraft"] .occupancy-metric { border-color: #5c513c; }
+:root[data-admin-theme="warcraft"] .occupancy-metric.combined { background: linear-gradient(135deg,#63503338,#aa7a2915); }
+:root[data-admin-theme="warcraft"] .occupancy-metric h3 { color: #d5c7aa; }
+:root[data-admin-theme="warcraft"] .occupancy-value>strong { color: #f1cf7d; text-shadow: 0 1px 4px #0004; }
+:root[data-admin-theme="warcraft"] .class-size { color: #bdc3b8; }
+:root[data-admin-theme="warcraft"] .class-size b { color: #e6ddc7; }
+:root[data-admin-theme="warcraft"] .report-secondary .stat-card>div { color: #d2c7ae; }
+:root[data-admin-theme="warcraft"] .report-secondary .stat-card>strong { color: #f0d79d; }
+:root[data-admin-theme="warcraft"] .stat-icon { background: #b4954e14; color: #cbb87d; border: 1px solid #806b413b; }
+:root[data-admin-theme="warcraft"] button { color: #d8cfb9; border-color: #645b47; background: linear-gradient(#343d42,#252d34); border-radius: 4px; box-shadow: inset 0 1px #ffffff08; }
+:root[data-admin-theme="warcraft"] button:hover { background: #3b4448; border-color: #af8c4d; color: #ffe7b0; }
+:root[data-admin-theme="warcraft"] button.primary { background: linear-gradient(#987c43,#6f5529); color: #fff1cb; border: 1px solid #c6a467; box-shadow: inset 0 1px #ffe9ad50,0 2px 5px #0004; }
+:root[data-admin-theme="warcraft"] button.primary:hover { background: linear-gradient(#af904e,#806334); }
+:root[data-admin-theme="warcraft"] :is(input,textarea,select,.search-field) { color: #e6e0d3; background: #151d24; border-color: #665b45; border-radius: 4px; }
+:root[data-admin-theme="warcraft"] .search-field input { border: 0; background: transparent; }
+:root[data-admin-theme="warcraft"] input::placeholder { color: #a5aaac; }
+:root[data-admin-theme="warcraft"] :is(input,textarea,select):focus { border-color: #d7b86d; box-shadow: 0 0 0 3px #c6a05918; }
+:root[data-admin-theme="warcraft"] :is(button,input,textarea,select,summary):focus-visible { outline-color: #e3c579; }
+:root[data-admin-theme="warcraft"] input:disabled { background: #252c30; color: #9e9f98; }
+:root[data-admin-theme="warcraft"] input[type=checkbox],:root[data-admin-theme="warcraft"] input[type=radio] { accent-color: #cfaa58; }
+:root[data-admin-theme="warcraft"] :is(th,td) { border-color: #3e484d; }
+:root[data-admin-theme="warcraft"] td { color: #ddd9cd; }
+:root[data-admin-theme="warcraft"] :is(.class-expander summary,.pager,.page-size,.loading,.broadcast-card summary,.broadcast-strip span:not(.badge),.target-grid>div>span:last-child) { color: #b8bdb3; }
+:root[data-admin-theme="warcraft"] :is(.workload-value strong,.workload-value span,.broadcast-fraction strong,.duplicate-students>details>summary) { color: #e8cd8b; }
+:root[data-admin-theme="warcraft"] .warning-text { color: #e7c486; }
+:root[data-admin-theme="warcraft"] th { background: #171f26; color: #c8b98f; }
+:root[data-admin-theme="warcraft"] tbody tr:hover { background: #c4a46b08; }
+:root[data-admin-theme="warcraft"] :is(.class-expander td,.class-expander,.class-list>div,.evaluation,.credential,.merge-profile,.freeze-teacher>div) { background: #192229; border-color: #414b4e; }
+:root[data-admin-theme="warcraft"] :is(.class-list strong,.evaluation strong,.student-detail strong,.bar-row strong) { color: #e4dac0; }
+:root[data-admin-theme="warcraft"] :is(.student-detail,.class-list,.evaluation,.target-grid>div,.freeze-record,.freeze-teacher,.freeze-factors,.pager,.class-heading) { border-color: #414b4e; }
+:root[data-admin-theme="warcraft"] :is(.badge,.count) { color: #d1c6a8; background: #99835b18; border: 1px solid #8f7e4c3b; }
+:root[data-admin-theme="warcraft"] :is(.badge.success,.status-circle.checked) { background: #264f41; color: #b8e0c4; border-color: #54806a; }
+:root[data-admin-theme="warcraft"] .badge.neutral { background: #313b41; color: #c5ccc7; }
+:root[data-admin-theme="warcraft"] :is(.badge.warning,.schedule-warnings) { background: #40331e; color: #f0d39c; border-color: #9d7c3c; }
+:root[data-admin-theme="warcraft"] :is(.notice,.broadcast-strip) { background: #25382e; color: #cedcca; border-color: #4a6b52; }
+:root[data-admin-theme="warcraft"] .notice.warning { background: #40331e; color: #f0d39c; border-color: #9d7c3c; }
+:root[data-admin-theme="warcraft"] :is(.error-box,.toast.error) { background: #4b2928; color: #ffd5c8; border-color: #a85d4f; }
+:root[data-admin-theme="warcraft"] .danger-text { color: #f0a497!important; }
+:root[data-admin-theme="warcraft"] .toast { background: #344535; color: #eee3c5; border: 1px solid #928055; box-shadow: 0 5px 25px #0008; }
+:root[data-admin-theme="warcraft"] .icon-button { background: transparent; box-shadow: none; border-color: transparent; }
+:root[data-admin-theme="warcraft"] .modal-backdrop { background: #05090dd1; backdrop-filter: blur(3px); }
+:root[data-admin-theme="warcraft"] :is(.bar-track,.mini-bar,.progress-track) { background: #10191f; border: 1px solid #435047; }
+:root[data-admin-theme="warcraft"] :is(.bar-track i,.mini-bar i,.progress-track i) { background: linear-gradient(90deg,#327d68,#a2c6a0); box-shadow: 0 0 6px #5dce9b22; }
+:root[data-admin-theme="warcraft"] .table-wrap .class-size { background: #adb5840e; }
+:root[data-admin-theme="warcraft"] :is(.bar-occupancy,.bar-occupancy small,.freeze-values,.freeze-note,.freeze-factors ul,.freeze-teacher p,.deletion-classes,.merge-profile p) { color: #bec2b6; }
+:root[data-admin-theme="warcraft"] .freeze-values strong { color: #f0cf80; }
+:root[data-admin-theme="warcraft"] :is(.freeze-delta.up,.freeze-factors.up h3) { color: #a7d9b4; }
+:root[data-admin-theme="warcraft"] :is(.freeze-delta.down,.freeze-factors.down h3) { color: #edbb86; }
+:root[data-admin-theme="warcraft"] .freeze-record-metrics>span { background: #192229; color: #bec2b6; }
+:root[data-admin-theme="warcraft"] .freeze-record-metrics strong { color: #eacd8d; }
+:root[data-admin-theme="warcraft"] .level-A { background: #254d38; color: #b4e1b8; }
+:root[data-admin-theme="warcraft"] .level-B { background: #334658; color: #c0dbf3; }
+:root[data-admin-theme="warcraft"] .level-C { background: #5b4325; color: #f2cf94; }
+:root[data-admin-theme="warcraft"] .empty { color: #a5aca7; }
+:root[data-admin-theme="warcraft"] .theme-choice { background: #192229; border-color: #5e5747; }
+:root[data-admin-theme="warcraft"] .theme-choice.selected { border-color: #d2ae61; box-shadow: 0 0 0 2px #d2ae6110; }
+:root[data-admin-theme="warcraft"] .theme-choice:focus-within { outline-color: #e3c579; }
+:root[data-admin-theme="warcraft"] .theme-choice-title strong { color: #e9d7ae; }
+:root[data-admin-theme="warcraft"] .theme-selected { color: #e8c679; }
+:root[data-admin-theme="warcraft"] .preview-metrics small { color: var(--preview-ink); }
+@media (max-width: 600px) { .theme-options { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .theme-choice { transition: none; } }
