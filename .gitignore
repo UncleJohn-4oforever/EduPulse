@@ -29,6 +29,9 @@ logs/
 *.csv
 *.xlsx
 *.zip
+*.zip.sha256
+*.exe
+*.msi
 *.bak
 # Local acceptance screenshots are kept on the workstation.
 docs/**/*.png

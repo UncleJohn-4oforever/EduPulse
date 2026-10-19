@@ -492,8 +492,8 @@
     "sha256": "af4604074462aab5f547b95fbb9eeb953b93cfada58bfb4db8bf13858603b777"
   },
   "README.md": {
-    "bytes": 14953,
-    "sha256": "5cf080eb50bee38147926d8c821633124b7b170355304585bce87f72d13d5634"
+    "bytes": 15102,
+    "sha256": "b2d802922421e023c549f48d9c5729c00388d0fe207c1eec53ba11d4b100b4db"
   },
   "restore.bat": {
     "bytes": 434,
@@ -600,16 +600,20 @@
     "sha256": "96a9a4f4399278a9cdfe1b9896b519b48d1e82d60568b72dfdf8a8c8d9cb31ed"
   },
   "scripts/launch.py": {
-    "bytes": 9700,
-    "sha256": "14f7dcfee0731d803c6f5881a3a84d1af8f6950863d43988a4c4aa2ef557dc6e"
+    "bytes": 9646,
+    "sha256": "1eaff35a8ac3c8d9be6dc93efdeec2f29ffa2ee36f7d71f03ee98c745e57b601"
+  },
+  "scripts/package-with-python.py": {
+    "bytes": 5451,
+    "sha256": "c9581d4b5f89d2f9fa897a82ea59ca5da47b302859c68ce740841fd7d2a9e91e"
   },
   "scripts/package.py": {
     "bytes": 1467,
     "sha256": "e8105ecfa3d404c0f08a13edaf18c043c0bf7fd537370f063a8131efe3b39df8"
   },
   "scripts/release_files.py": {
-    "bytes": 1628,
-    "sha256": "5a3e87c55116ba179285aeacaa3d880d14c0aa17d1c7f318811939f89a0cf566"
+    "bytes": 1653,
+    "sha256": "af27f041dfb386d87e77705740692107a3c3c012909dce149e4cd07a54a4fb56"
   },
   "scripts/seed-browser-test.py": {
     "bytes": 875,
@@ -642,6 +646,10 @@
   "test.bat": {
     "bytes": 92,
     "sha256": "71cb685de9ac9619e223529cce334b3d51927359beb59f8257e15fcbf1b830cd"
+  },
+  "使用前请先看.txt": {
+    "bytes": 2333,
+    "sha256": "0f78d9877d88372a01aa3d1bb7732e4dd93655a2fdcaf60361bda470e34d28e6"
   },
   "开始.bat": {
     "bytes": 388,
