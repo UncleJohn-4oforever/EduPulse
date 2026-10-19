@@ -68,7 +68,7 @@ try {
     if (-not $CheckOnly) {
         $remaining = @(Get-NetTCPConnection -State Listen -ErrorAction Stop | Where-Object LocalPort -eq $servicePort)
         if ($remaining.Count) { throw "Port $servicePort is still in use. Restart was cancelled." }
-        Write-Host 'Saved data and accounts are preserved. Run start.bat to start again.'
+        Write-Host 'Saved data and accounts are preserved. Use the launch BAT file to start again.'
     }
     exit 0
 } catch {

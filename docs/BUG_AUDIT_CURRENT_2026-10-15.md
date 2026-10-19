@@ -52,7 +52,7 @@
 
 ## 本机运行环境
 
-本轮实际执行`.venv\Scripts\python.exe --version`失败，错误指向不存在或不可启动的`...\Python\pythoncore-3.12-64\python.exe`。默认`start.bat`使用这一虚拟环境，因此当前目录的默认启动路径受阻。本次后端与浏览器验证使用独立`.test-venv`和新建的隔离数据库运行；没有修改原`.venv`。此项属于本机环境问题，单列于上述4项功能缺陷之外。
+本轮实际执行`.venv\Scripts\python.exe --version`失败，错误指向不存在或不可启动的`...\Python\pythoncore-3.12-64\python.exe`。默认`开始.bat`使用这一虚拟环境，因此当前目录的默认启动路径受阻。本次后端与浏览器验证使用独立`.test-venv`和新建的隔离数据库运行；没有修改原`.venv`。此项属于本机环境问题，单列于上述4项功能缺陷之外。
 
 ## 检查范围与限制
 

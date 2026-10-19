@@ -42,7 +42,7 @@ def test_release_allowlist_excludes_business_files(tmp_path):
     from pathlib import Path
     script=Path(__file__).resolve().parents[2]/'scripts'/'release_files.py'
     spec=importlib.util.spec_from_file_location('release_files',script);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    included=['run.py','setup.bat','.env.example','frontend/dist/index.html','frontend/dist/assets/index.js','backend/app/main.py','backend/wheels-win-py312/example.whl','scripts/package.py','docs/licenses/react-LICENSE.txt']
+    included=['run.py','首次运行.bat','.env.example','frontend/dist/index.html','frontend/dist/assets/index.js','backend/app/main.py','backend/wheels-win-py312/example.whl','scripts/package.py','docs/licenses/react-LICENSE.txt']
     excluded=['学员名单核对结果.xlsx','student.csv','notes.json','.env','backend/app/private.xlsx','exports/report.xlsx','browser-test-data/db.sqlite3','frontend/node_modules/a.js','docs/screenshots/private.png']
     for name in included+excluded:
         path=tmp_path/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text('fixture',encoding='utf-8')

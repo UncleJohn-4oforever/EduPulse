@@ -1,17 +1,18 @@
 @echo off
+chcp 65001 >nul
 setlocal
 cd /d "%~dp0"
-echo EduPulse 1.2 setup - requires Python 3.12 x64.
+echo EduPulse 首次运行：安装环境并创建教学主管账号。
 py -3.12 -c "import struct; assert struct.calcsize('P') == 8" >nul 2>&1
 if errorlevel 1 (
-  echo Please install Python 3.12 x64 with the Python launcher, then retry.
+  echo 请先安装 Python 3.12（64 位，并勾选 Python Launcher），然后重新双击本文件。
   pause
   exit /b 1
 )
 if exist ".venv\Scripts\python.exe" (
   .venv\Scripts\python.exe -c "import sys, struct; assert sys.version_info[:2] == (3,12) and struct.calcsize('P') == 8" >nul 2>&1
   if errorlevel 1 (
-    echo Repairing the existing Python environment...
+    echo 正在修复已有运行环境……
     py -3.12 -m venv --upgrade .venv
     if errorlevel 1 goto failed
   )
@@ -29,14 +30,14 @@ if errorlevel 1 goto failed
 if errorlevel 1 goto failed
 .venv\Scripts\python.exe run.py init-admin
 if errorlevel 1 (
-  echo If an administrator already exists, use start.bat. Otherwise retry setup.
+  echo 如果已创建过主管账号，请双击“开始”。否则请检查上方提示后重试。
   pause
   exit /b 1
 )
-echo Setup complete. Run start.bat to launch EduPulse.
+echo 首次设置完成！以后请双击“开始”，自动打开登录入口。
 pause
 exit /b 0
 :failed
-echo Setup failed. See the error above.
+echo 首次设置未完成，请查看上方错误提示。
 pause
 exit /b 1

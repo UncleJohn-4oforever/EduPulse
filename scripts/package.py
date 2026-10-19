@@ -18,7 +18,7 @@ with ZipFile(out,'w',ZIP_DEFLATED,compresslevel=9) as z:
 with ZipFile(out) as z:
     assert z.testzip() is None
     assert 'EduPulse/frontend/dist/index.html' in z.namelist()
-    assert 'EduPulse/setup.bat' in z.namelist()
+    assert 'EduPulse/首次运行.bat' in z.namelist()
     assert not any(n.endswith(('.sqlite3','.db','.env')) for n in z.namelist())
 checksum=hashlib.sha256(out.read_bytes()).hexdigest()
 (out.parent/(out.name+'.sha256')).write_text(checksum+'  '+out.name+'\n')
