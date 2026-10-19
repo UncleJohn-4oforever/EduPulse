@@ -1,10 +1,14 @@
 from io import BytesIO
 from pathlib import Path
 import os
+import math
+import unicodedata
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
+from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.page import PageMargins
 from PIL import Image, ImageDraw, ImageFont
 
 def local(v):
@@ -16,19 +20,66 @@ def slot_text(slots):
     return '；'.join(f"周{'一二三四五六日'[s['weekday']-1]} {s['slot_label']}"+(f" {s['start_time']}-{s['end_time']}" if s['start_time'] else '') for s in slots)
 def workload_note(data):
     return '周课量按学生档位在同班、同星期、同档位去重' if data.get('workload_basis')=='student-slot-union' else '周课量按旧版班级固定时段数'
+def text_width(value):
+    """Excel widths use Latin character units; Chinese needs roughly two."""
+    return sum(2 if unicodedata.east_asian_width(c) in ('W','F') else 1 for c in str(value))
+
+def style_sheet(ws, data, percentages=(), decimals=()):
+    """Shared export template; keep row 1 filterable and values untouched."""
+    ws.sheet_view.showGridLines=False
+    ws.freeze_panes='A2'
+    ws.auto_filter.ref=ws.dimensions
+    ws.sheet_properties.pageSetUpPr.fitToPage=True
+    ws.sheet_properties.tabColor='0F766E'
+    ws.print_options.horizontalCentered=True
+    ws.print_area=ws.dimensions
+    ws.print_title_rows='1:1'
+    ws.page_setup.orientation='landscape' if ws.max_column>6 else 'portrait'
+    ws.page_setup.paperSize=ws.PAPERSIZE_A4
+    ws.page_setup.fitToWidth=1
+    ws.page_setup.fitToHeight=0
+    ws.page_margins=PageMargins(left=.3,right=.3,top=.6,bottom=.5,header=.25,footer=.25)
+    ws.oddHeader.left.text='EduPulse · '+ws.title
+    ws.oddHeader.right.text=local(data['generated_at'])+'（北京时间）'
+    ws.oddFooter.left.text='筛选后的全部记录'
+    ws.oddFooter.right.text='第 &P 页 / 共 &N 页'
+    widths=[]
+    for col in ws.columns:
+        header=str(col[0].value or '')
+        longest=max(text_width(c.value if c.value is not None else '') for c in col)
+        if header=='科目' and ws.title=='学生列表': width=46
+        elif header in ('文字评价','内容'): width=64
+        elif header in ('该生上课档位','时段'): width=48
+        elif header in ('姓名','教师','任课教师'): width=min(24,max(16,longest*1.15+3))
+        elif header in ('名称','班级'): width=min(36,max(24,longest*1.15+3))
+        elif header in ('账号','评价更新时间','确认时间'): width=min(30,max(24,longest*1.15+3))
+        else: width=min(30,max(16,longest*1.15+3))
+        widths.append(width)
+        ws.column_dimensions[get_column_letter(col[0].column)].width=width
+    ws.row_dimensions[1].height=34
+    for cell in ws[1]:
+        cell.font=Font(name='微软雅黑',size=12,bold=True,color='FFFFFF')
+        cell.fill=PatternFill('solid',fgColor='0F5C53')
+        cell.alignment=Alignment(horizontal='center',vertical='center',wrap_text=True)
+    for row in ws.iter_rows(min_row=2):
+        lines=1
+        for cell,width in zip(row,widths):
+            value=cell.value if cell.value is not None else ''
+            usable=max(1,(width-3)/1.15)
+            lines=max(lines,sum(max(1,math.ceil(text_width(part)/usable)) for part in str(value).split('\n')))
+            cell.font=Font(name='微软雅黑',size=12,color='243E39')
+            cell.fill=PatternFill('solid',fgColor='FFFFFF' if cell.row%2==0 else 'F0F6F4')
+            cell.alignment=Alignment(horizontal='right' if isinstance(value,(int,float)) else 'left',vertical='center',wrap_text=True)
+            if cell.column in percentages and isinstance(value,(int,float)): cell.number_format='0.00%'
+            elif cell.column in decimals and isinstance(value,(int,float)): cell.number_format='0.00'
+        ws.row_dimensions[row[0].row].height=min(409,max(28,lines*20+8))
+
 def legacy_xlsx(data):
     wb=Workbook(); wb.remove(wb.active)
     def sheet(name,headers,rows,percentage_columns=()):
         ws=wb.create_sheet(name); ws.append(headers)
         for row in rows: ws.append([safe(v) for v in row])
-        ws.freeze_panes='A2'; ws.auto_filter.ref=ws.dimensions
-        for cell in ws[1]: cell.font=Font(color='FFFFFF',bold=True); cell.fill=PatternFill('solid',fgColor='0F766E')
-        for col in ws.columns:
-            ws.column_dimensions[col[0].column_letter].width=min(50,max(14,max(len(str(c.value or '')) for c in col)+2))
-            for cell in col: cell.alignment=Alignment(vertical='top',wrap_text=True)
-        for r in range(2,ws.max_row+1):
-            for c in percentage_columns:
-                if isinstance(ws.cell(r,c).value,(int,float)): ws.cell(r,c).number_format='0.00%'
+        style_sheet(ws,data,percentage_columns)
     rows=[]
     for t in data['teachers']:
         row=[t['display_name'],t['username'],t['campus'],t['groups']['1']['classes']]
@@ -117,14 +168,7 @@ def xlsx(data,view='all'):
     for name,headers,rows,percentages,decimals in tables:
         ws=wb.create_sheet(name);ws.append(headers)
         for row in rows:ws.append([safe(v) if v is not None else '—' for v in row])
-        ws.freeze_panes='A2';ws.auto_filter.ref=ws.dimensions
-        for c in ws[1]:c.font=Font(color='FFFFFF',bold=True);c.fill=PatternFill('solid',fgColor='0F766E')
-        for col in ws.columns:
-            ws.column_dimensions[col[0].column_letter].width=min(55,max(16,max(len(str(c.value or '')) for c in col)+2))
-            for cell in col:cell.alignment=Alignment(vertical='top',wrap_text=True)
-        for r in range(2,ws.max_row+1):
-            for c in (*percentages,*decimals):
-                if isinstance(ws.cell(r,c).value,(float,int)):ws.cell(r,c).number_format='0.00%' if c in percentages else '0.00'
+        style_sheet(ws,data,percentages,decimals)
     out=BytesIO();wb.save(out);return out.getvalue()
 
 
