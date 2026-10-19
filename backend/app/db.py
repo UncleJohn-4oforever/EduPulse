@@ -169,5 +169,5 @@ def init_db():
     migrate_frozen_records(engine)
     with SessionLocal.begin() as db:
         if not db.query(Dictionary).first():
-            for kind,names in {'campus':['主校区'],'subject':['数学','英语','语文','物理','化学','生物'],'grade':['小学一年级','小学二年级','小学三年级','小学四年级','小学五年级','小学六年级','初一','初二','初三','高一','高二','高三']}.items():
+            for kind,names in {'campus':['主校区'],'subject':['数学','英语','语文','物理','化学','生物','道法','历史'],'grade':['初一','初二','初三','高一','高二','高三','一年级','二年级','三年级','四年级','五年级','六年级']}.items():
                 db.add_all([Dictionary(kind=kind,name=n) for n in names])

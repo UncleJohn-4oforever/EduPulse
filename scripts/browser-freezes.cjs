@@ -10,7 +10,7 @@ const base=process.env.EDUPULSE_TEST_URL||'http://127.0.0.1:8076';
   async function login(p,u,pw){await p.goto(base);await p.getByLabel('登录账号',{exact:true}).fill(u);await p.getByLabel('密码',{exact:true}).fill(pw);await p.getByRole('button',{name:'进入工作台'}).click();await p.locator('.sidebar').waitFor()}
   async function api(p,path,method='GET',body){return p.evaluate(async({path,method,body})=>{const auth=await(await fetch('/api/auth/me')).json();const r=await fetch('/api'+path,{method,headers:{'Content-Type':'application/json','X-CSRF-Token':auth.csrf_token},body:body===undefined?undefined:JSON.stringify(body)});if(!r.ok)throw new Error(await r.text());return r.json()},{path,method,body})}
   await login(a,'browser-admin','BrowserTestOnly2026');const dict=await api(a,'/dictionaries'),campus=dict.campus[0].id;
-  const u=await api(a,'/admin/teachers','POST',{display_name:'演示教师崔咸',campus_id:campus}),pw=await api(a,`/admin/teachers/${u.id}/issue-password`,'POST');await login(t,pw.username,pw.password);
+  const u=await api(a,'/admin/teachers','POST',{display_name:'虚构冻结测试教师',campus_id:campus}),pw=await api(a,`/admin/teachers/${u.id}/issue-password`,'POST');await login(t,pw.username,pw.password);
   const students=[];for(const name of ['演示学生甲','演示学生乙'])students.push(await api(t,'/students','POST',{display_name:name,grade:'高一',campus_id:campus}));
   async function room(subject,cap,ids,name='演示周六一档'){return api(t,'/teacher/classes','POST',{display_name:name,capacity:cap,subject_id:subject,students:ids.map(id=>({student_id:id,level:'B',note:'冻结演示评价',weekly_slots:[{weekday:name==='周三五档'?3:6,slot_number:name==='周三五档'?5:1}]}))})}
   await room(dict.subject[0].id,6,students.map(s=>s.id));await room(dict.subject[1].id,3,[students[0].id]);
