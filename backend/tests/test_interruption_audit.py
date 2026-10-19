@@ -31,6 +31,8 @@ def test_unmapped_legacy_slots_keep_distinct_times_in_class_workload():
     teacher = teachers[0][1]
     room = classroom(teacher, subject, 3, [student(teacher, campus), student(teacher, campus)])
     with SessionLocal.begin() as db:
+        # A legacy record has no authoritative class schedule.
+        db.get(ClassRoom,room['id']).slots=[]
         for enrollment in db.query(Enrollment).filter_by(class_id=room['id']):
             enrollment.slots = [StudentWeeklySlot(weekday=3, slot_number=None,
                 slot_label='旧特殊时段', start_time=start, end_time=end)

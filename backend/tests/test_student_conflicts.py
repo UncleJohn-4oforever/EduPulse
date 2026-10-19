@@ -42,13 +42,19 @@ def test_shared_student_conflicts_across_teachers(day, number, start, end, kind)
     assert admin.get('/api/admin/schedule-warnings').json() == []
 
 
-def test_student_conflict_uses_enrollment_slots_not_class_union():
+def test_legacy_student_conflict_uses_enrollment_slots_not_class_union():
     admin, teachers, campus, subject, english = setup()
     t1, t2 = [t[1] for t in teachers]
     shared, other = student(t1, campus), student(t1, campus)
     a = schedule(t1, classroom(t1, subject, 3, [shared, other]), 6, 1, '08:00', '10:00')
     body = body_of(a)
     body['students'][0]['weekly_slots'] = [{'weekday': 7, 'slot_number': 1}]
-    assert t1.patch(f"/api/teacher/classes/{a['id']}", json=body).status_code == 200
+    assert t1.patch(f"/api/teacher/classes/{a['id']}", json=body).status_code == 422
+    # Historical records remain readable, though new mixed-period writes are blocked.
+    from app.db import SessionLocal,ClassRoom,Enrollment,StudentWeeklySlot
+    with SessionLocal.begin() as db:
+        db.get(ClassRoom,a['id']).slots=[]
+        enrollment=db.query(Enrollment).filter_by(class_id=a['id'],student_id=shared).one()
+        enrollment.slots=[StudentWeeklySlot(weekday=7,slot_number=1,slot_label='第1档')]
     schedule(t2, classroom(t2, english, 3, [shared]), 6, 1, '08:00', '10:00')
     assert admin.get('/api/admin/schedule-warnings').json() == []

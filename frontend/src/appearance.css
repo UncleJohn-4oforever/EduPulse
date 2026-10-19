@@ -23,7 +23,7 @@
 .preview-table { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
 .preview-table i { height: 3px; background: var(--preview-line); }
 
-/* Warcraft-inspired bronze and stone, scoped to authenticated supervisors. */
+/* Warcraft-inspired bronze and stone, shared by authenticated teaching workspaces. */
 :root[data-admin-theme="warcraft"] { color-scheme: dark; background: #141a20; color: #e6e0d2; --epic-gold:#e7c57b; --epic-muted:#b8b7ac; --epic-line:#524b3c; --epic-panel:#202930; }
 :root[data-admin-theme="warcraft"] body { background: #141a20; }
 :root[data-admin-theme="warcraft"] .app { background: radial-gradient(ellipse at 80% 0,#a8803520,transparent 50%), repeating-linear-gradient(117deg,#ffffff02 0 1px,transparent 1px 6px),#171e25; }
@@ -108,3 +108,17 @@
 :root[data-admin-theme="warcraft"] .preview-metrics small { color: var(--preview-ink); }
 @media (max-width: 600px) { .theme-options { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .theme-choice { transition: none; } }
+
+/* Teacher cards and the compact editor share the bronze-and-stone palette. */
+:root[data-admin-theme="warcraft"] .teacher-app :is(.teacher-task,.teacher-empty){background:#202e30;border-color:#76623e;color:#d9d0b8}
+:root[data-admin-theme="warcraft"] .teacher-app :is(.student-line,.admin-course-slot){background:#202b31;border-color:#695b42}
+:root[data-admin-theme="warcraft"] .teacher-app .student-inline input[readonly]{background:#263238;color:#e8e2d4}
+:root[data-admin-theme="warcraft"] .teacher-app :is(.class-body,.class-summary,.class-bottom){border-color:#414b4e}
+:root[data-admin-theme="warcraft"] .teacher-app :is(.summary-student>span,.class-shared-slot,.course-editor-help,.footer){color:#c3beae}
+:root[data-admin-theme="warcraft"] .teacher-app :is(.student-evaluation summary,.summary-edit,.text-button){color:#e5ca8e}
+:root[data-admin-theme="warcraft"] .teacher-app .class-toggle{background:transparent;border-color:transparent;box-shadow:none}
+:root[data-admin-theme="warcraft"] .teacher-app .class-toggle:hover{background:#d6b35f0a}
+:root[data-admin-theme="warcraft"] .teacher-app .add-student{background:linear-gradient(#384332,#25362e);color:#e9d69c;border:1px dashed #968052}
+:root[data-admin-theme="warcraft"] .teacher-app .add-student:hover{background:#3c4838;border-color:#d4b56f}
+:root[data-admin-theme="warcraft"] .teacher-course-modal .class-bottom{background:#20282f;box-shadow:0 -8px 12px #20282f}
+:root[data-admin-theme="warcraft"] .teacher-app .teacher-title h1{color:#e8cb8e;text-shadow:0 1px 2px #0009}

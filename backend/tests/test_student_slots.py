@@ -10,24 +10,20 @@ from app.db import *
 from app.migrations import migrate_student_schedules
 
 
-def test_student_slots_are_independent_and_class_load_is_union():
+def test_mixed_class_periods_are_rejected_and_last_removal_keeps_schedule():
     a,ts,campus,math,_=setup();t=ts[0][1]
     c=classroom(t,math,6,[student(t,campus) for _ in range(3)])
     body=body_of(c)
-    for m in body['students']:m['weekly_slots']=[{'weekday':3,'slot_number':3}]
-    body['students'][1]['weekly_slots'].append({'weekday':4,'slot_number':6,'start_time':'17:00','end_time':'18:00'})
-    r=t.patch(f"/api/teacher/classes/{c['id']}",json=body);assert r.status_code==200,r.text
-    updated=r.json();assert len(updated['weekly_slots'])==2
-    assert [len(m['weekly_slots']) for m in updated['students']]==[1,2,1]
-    assert updated['weekly_slots'][1]['start_time']=='17:00'
-    assert a.get('/api/admin/reports/workload').json()[0]['weekly_lessons']==2
-    fresh=t.get(f"/api/teacher/classes/{c['id']}").json();assert fresh==updated
-    body=body_of(fresh);body['students'].pop(1)
-    r=t.patch(f"/api/teacher/classes/{c['id']}",json=body);assert r.status_code==200
+    body['students'][1]['weekly_slots']=[{'weekday':4,'slot_number':6}]
+    assert t.patch(f"/api/teacher/classes/{c['id']}",json=body).status_code==422
+    body=body_of(c);body['students'][1]['weekly_slots'].append({'weekday':4,'slot_number':6})
+    assert t.patch(f"/api/teacher/classes/{c['id']}",json=body).status_code==422
+    assert t.get(f"/api/teacher/classes/{c['id']}").json()==c
+    body=body_of(c);body['students']=[]
+    response=t.patch(f"/api/teacher/classes/{c['id']}",json=body)
+    assert response.status_code==200,response.text
+    assert response.json()['class_slot']==c['class_slot']
     assert a.get('/api/admin/reports/workload').json()[0]['weekly_lessons']==1
-    body=body_of(r.json());body['students']=[]
-    assert t.patch(f"/api/teacher/classes/{c['id']}",json=body).status_code==200
-    assert a.get('/api/admin/reports/workload').json()[0]['weekly_lessons']==0
 
 
 def test_shared_student_has_separate_subject_schedules_and_no_teacher_leak():

@@ -13,6 +13,9 @@ def student_slot_json(s):
     return {'weekday':s.weekday,'slot_number':s.slot_number,'slot_label':s.slot_label,'start_time':s.start_time,'end_time':s.end_time}
 
 def class_slots(c):
+    if c.slots:
+        from .migrations import legacy_slot_number
+        return sorted([{'weekday':s.weekday,'slot_number':legacy_slot_number(s.slot_label),'slot_label':s.slot_label,'start_time':s.start_time,'end_time':s.end_time} for s in c.slots],key=lambda s:(s['weekday'],s['slot_number'] or 99,s['slot_label']))
     result={}
     for e in c.enrollments:
         for slot in e.slots:
@@ -23,10 +26,12 @@ def class_slots(c):
     return sorted(result.values(),key=lambda s:(s['weekday'],s['slot_number'] or 99,s['slot_label']))
 
 def class_json(c):
+    slots=class_slots(c)
     return {k:getattr(c,k) for k in ('id','teacher_id','campus_id','subject_id','grade','display_name','capacity','version','updated_at')} | {
         'grade':' / '.join(dict.fromkeys(e.student.grade for e in c.enrollments)),
         'name_is_manual':c.name_is_manual,
-        'weekly_slots':class_slots(c),
+        'weekly_slots':slots,
+        'class_slot':{k:slots[0][k] for k in ('weekday','slot_number','start_time','end_time')} if len(slots)==1 and slots[0]['slot_number'] else None,
         'students':[{'enrollment_id':e.id,'student_id':e.student_id,'display_name':e.student.display_name,'grade':e.student.grade,'level':e.evaluation.level,'note':e.evaluation.note,'updated_at':e.evaluation.updated_at,'weekly_slots':[student_slot_json(s) for s in e.slots]} for e in c.enrollments]}
 def report(db):
     consistent_read(db)

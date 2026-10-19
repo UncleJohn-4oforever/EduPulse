@@ -1,4 +1,9 @@
 type Slot = {weekday:number;slot_number?:number|null;start_time?:string|null;end_time?:string|null};
+export function sharedClassSlot(students:{weekly_slots?:Slot[]}[],fallback:Slot={weekday:3,slot_number:3,start_time:null,end_time:null}) {
+  const slots=students.flatMap(s=>s.weekly_slots||[]);
+  const slot=slots.find(s=>s.start_time&&s.end_time)||slots[0]||fallback;
+  return {weekday:slot.weekday,slot_number:slot.slot_number??null,start_time:slot.start_time||null,end_time:slot.end_time||null};
+}
 const subjects = new Map<string,number>();
 const subjectKey = (user:{id:number;username:string}) => `edupulse:last-subject:${user.id}:${user.username}`;
 

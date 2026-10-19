@@ -47,11 +47,11 @@ const base=process.env.EDUPULSE_TEST_URL||'http://127.0.0.1:18765';
   await p.getByRole('radio',{name:/魔兽/}).check();await theme('warcraft');
   if(process.env.EDUPULSE_THEME_SCREENSHOTS){await p.screenshot({path:'/tmp/edupulse-epic-settings.png',fullPage:true});await p.getByRole('button',{name:'教师满班率',exact:true}).click();await p.locator('.report-summary').waitFor();await p.screenshot({path:'/tmp/edupulse-epic-dashboard.png',fullPage:true})}
   for(const width of [1024,768,390]){await p.setViewportSize({width,height:900});if(width<=850)await p.locator('.mobile-toggle').click();await p.getByRole('button',{name:'设置',exact:true}).click();assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`mobile ${width}`)}
-  // Shared browsers must not apply the supervisor's palette to teacher sessions.
+  // Teachers use Warcraft; login stays classic and supervisor preferences persist.
   const dict=await api('/dictionaries'),u=await api('/admin/teachers','POST',{display_name:'主题隔离测试教师',campus_id:dict.campus[0].id});
   const credentials=await api(`/admin/teachers/${u.id}/issue-password`,'POST');
   await p.setViewportSize({width:1366,height:900});await p.getByTitle('退出登录',{exact:true}).click();await p.getByLabel('登录账号',{exact:true}).waitFor();await theme('classic');
-  await login(p,credentials.username,credentials.password);await theme('classic');assert.equal(await p.locator('.teacher-app').count(),1);
+  await login(p,credentials.username,credentials.password);await theme('warcraft');assert.equal(await p.locator('.teacher-app').count(),1);
   await p.getByTitle('退出登录',{exact:true}).click();await login(p,'browser-admin','BrowserTestOnly2026');await theme('warcraft');
   assert.deepEqual(errors,[]);console.log('PASS: both themes on all eight admin pages; identical statistics; XLSX exports; dialog; saved selection on reload/login; teacher/login isolation; responsive widths; no browser errors.');
  }finally{await browser.close()}

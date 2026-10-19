@@ -49,17 +49,30 @@ class Slot(Strict):
         if bool(self.start_time)!=bool(self.end_time):raise ValueError('请同时填写开始和结束时间，或都留空')
         if self.start_time and self.end_time<=self.start_time:raise ValueError('结束时间须晚于开始时间')
         return self
+class NewClassStudent(Strict):
+    display_name: str=Field(min_length=1,max_length=80)
+    grade: str=Field(min_length=1,max_length=40)
 class Member(Strict):
-    student_id: ObjectId
+    student_id: ObjectId|None=None
+    new_student: NewClassStudent|None=None
     level: Literal['A','B','C']='B'
     note: str=Field(default='',max_length=1000)
     weekly_slots: list[Slot]=Field(min_length=1,max_length=42)
     @model_validator(mode='after')
     def unique_slots(self):
+        if (self.student_id is None)==(self.new_student is None):raise ValueError('请选择已有学生或填写新学生，不能同时提交')
         keys=[(s.weekday,s.slot_number) for s in self.weekly_slots]
         if len(keys)!=len(set(keys)):raise ValueError('同一学生不能重复选择同一星期、同一档位')
         return self
 class ClassIn(Strict):
+    # New editors submit one class schedule. Legacy clients remain readable.
+    class_slot: Slot|None=None
+    @model_validator(mode='before')
+    @classmethod
+    def shared_class_slot(cls,value):
+        if isinstance(value,dict) and value.get('class_slot') is not None and isinstance(value.get('students',[]),list):
+            return {**value,'students':[{**m,'weekly_slots':[value['class_slot']]} if isinstance(m,dict) else m for m in value.get('students',[])]}
+        return value
     display_name: str=Field(min_length=1,max_length=100)
     name_is_manual: bool=True
     subject_id: ObjectId
@@ -71,7 +84,11 @@ class ClassIn(Strict):
     @model_validator(mode='after')
     def members(self):
         if len(self.students)>self.capacity:raise ValueError('学生人数超过班型容量')
-        if len({m.student_id for m in self.students})!=len(self.students):raise ValueError('同一学生不能重复加入班级')
+        ids=[m.student_id for m in self.students if m.student_id is not None]
+        if len(set(ids))!=len(ids):raise ValueError('同一学生不能重复加入班级')
+        slots=[s for m in self.students for s in m.weekly_slots]
+        if any(len(m.weekly_slots)!=1 for m in self.students) or len({(s.weekday,s.slot_number) for s in slots})>1:
+            raise ValueError('一个班级只能有一个档位，所有学生须使用相同星期和档位')
         times={}
         for member in self.students:
             for slot in member.weekly_slots:
@@ -79,7 +96,13 @@ class ClassIn(Strict):
                     key=(slot.weekday,slot.slot_number);value=(slot.start_time,slot.end_time)
                     if key in times and times[key]!=value:raise ValueError('同班同一星期同档位的具体时间须一致；也可以留空')
                     times[key]=value
+        if slots:
+            self.class_slot=self.class_slot or next((s for s in slots if s.start_time),slots[0])
+            for member in self.students:member.weekly_slots=[self.class_slot]
         return self
+class AdminClassIn(ClassIn):
+    teacher_id: ObjectId
+
 class BroadcastIn(Strict):
     title: str=Field(min_length=1,max_length=120)
     starts_at: datetime

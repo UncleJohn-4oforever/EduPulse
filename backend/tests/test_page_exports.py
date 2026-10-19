@@ -33,9 +33,7 @@ def test_exports_match_page_filters_order_and_current_metrics():
     assert wb['学生列表'].max_row==2 and wb['学生列表']['A2'].value==second
     assert wb['学生评价与档位明细'].max_row==2
     # Different class types all count; 18 lessons must export as 120%, unbounded.
-    c=t.get('/api/teacher/classes').json()[0];body=body_of(c)
-    for member in body['students']:member['weekly_slots']=[{'weekday':i//6+1,'slot_number':i%6+1} for i in range(17)]
-    assert t.patch(f"/api/teacher/classes/{c['id']}",json=body).status_code==200
+    for _ in range(16):classroom(t,math,3,[first])
     wb=workbook(a,'view=workload');assert set(wb.sheetnames)=={'教师周课量','统计说明'}
     ws=wb['教师周课量'];assert ws['G2'].value==18 and ws['I2'].value=='18/15' and ws['J2'].value==1.2
     assert ws['J2'].number_format=='0.00%'

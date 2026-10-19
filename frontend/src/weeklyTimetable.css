@@ -1,0 +1,67 @@
+.week-overview{margin:20px 0 28px;--week-bg:#fff;--week-ink:#243e39;--week-line:#d3e2dc;--week-head:#e9f3ee;--week-card:#f5faf7;--week-muted:#52655e;--week-warn:#8a4909}
+.week-overview>.section-title{flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.week-overview .help{margin:6px 0 0}
+.week-controls{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.week-overview .week-hint-toggle{display:flex;align-items:center;gap:8px;margin:0;font-size:15px;cursor:pointer;color:var(--week-ink)}
+.week-hint-toggle input{margin:0;width:18px;height:18px}.week-hint-toggle>span{font-size:14px;color:var(--week-muted)}
+.week-add-course,.week-edit-course{width:100%;font-size:14px;padding:6px 8px;margin-top:8px}
+.week-add-course{border-style:dashed;background:transparent}
+.admin-course-modal{width:min(1200px,96vw);max-width:1200px}
+.admin-course-modal>.compact-class{margin:16px 0 0}
+.admin-course-slot{padding:14px;border:1px solid #9bbeb1;border-radius:7px;margin-bottom:16px}
+.admin-slot-fields{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.admin-slot-fields label{flex:1;min-width:120px;margin:8px 0}.admin-slot-fields>button{margin-bottom:8px}
+.admin-course-modal .student-inline{grid-template-columns:1.2fr .65fr 3fr auto}
+:root[data-admin-theme="warcraft"] .admin-course-modal .student-line{background:#202b31;border-color:#695b42}
+:root[data-admin-theme="warcraft"] .admin-course-modal .student-inline input[readonly]{background:#263238;color:#e8e2d4}
+:root[data-admin-theme="warcraft"] .admin-course-modal .student-evaluation summary{color:#d8c79f}
+@media(max-width:700px){.admin-course-modal .student-inline{grid-template-columns:1fr}.admin-slot-fields label{min-width:110px}}
+/* The teacher dialog keeps the full editor in a compact, readable form. */
+.teacher-course-modal{width:min(1060px,96vw);padding:18px 20px;max-height:90vh}
+.teacher-course-modal>.section-title{margin-bottom:5px}.teacher-course-modal>.section-title h2{font-size:20px}
+.teacher-course-modal .course-editor-help{font-size:14px;color:#52655e;margin:4px 0 10px;line-height:1.6}
+.teacher-course-modal .course-editor-help summary{text-decoration:underline;text-underline-offset:3px}.teacher-course-modal .course-editor-help p{margin-top:6px;font-size:14px}
+.teacher-course-modal>.compact-class{border:0;box-shadow:none;padding:0;margin:8px 0 0}
+.teacher-course-modal .class-heading{gap:8px}.teacher-course-modal .class-toggle{min-height:32px;padding:3px 0}
+.teacher-course-modal .class-toggle strong{font-size:16px}.teacher-course-modal .class-toggle small{display:none}
+.teacher-course-modal .class-body{border-top:0;padding-top:0;margin-top:10px}
+.teacher-course-modal .editor-fields{display:flex;flex-direction:column;gap:12px}
+.teacher-course-modal .class-basics{order:0;max-width:none;gap:12px;margin:0;grid-template-columns:1fr 1fr 1fr}
+.teacher-course-modal .admin-course-slot{order:1;display:grid;grid-template-columns:72px minmax(0,1fr);align-items:center;gap:4px 10px;padding:9px 12px;margin:0;background:#f5f9f7;border-color:#d1dfd8}
+.teacher-course-modal .admin-course-slot>strong{font-size:15px}.teacher-course-modal .admin-slot-fields{gap:10px;flex-wrap:nowrap}
+.teacher-course-modal .admin-slot-fields label{min-width:0;margin:0;font-size:14px}.teacher-course-modal .admin-slot-fields>button{margin:0;white-space:nowrap;min-height:40px;align-self:end}
+.teacher-course-modal .admin-course-slot .help{grid-column:2;margin:2px 0 0;font-size:13px;line-height:1.5}
+.teacher-course-modal label input,.teacher-course-modal label select,.teacher-course-modal label textarea{margin-top:4px}
+.teacher-course-modal input,.teacher-course-modal select{min-height:40px;padding:7px 9px;font-size:15px}
+.teacher-course-modal .student-lines{order:2}.teacher-course-modal .student-line{margin:0 0 10px;padding:10px}.teacher-course-modal .student-line:last-child{margin-bottom:0}
+.teacher-course-modal .student-inline{grid-template-columns:minmax(120px,1.1fr) 90px minmax(410px,3.5fr) 30px;gap:9px}
+.teacher-course-modal .student-inline input,.teacher-course-modal .student-inline select{min-height:40px}
+.teacher-course-modal .remove-student{margin-top:23px;padding:8px 4px}.teacher-course-modal .student-row-extras{margin-top:4px;gap:4px 14px}
+.teacher-course-modal .inline-search{margin:5px 0}.teacher-course-modal .student-evaluation summary{padding:2px 0;font-size:14px}
+.teacher-course-modal .add-student{order:3;min-height:40px;padding:7px 12px;margin:0;border-width:1px}
+.teacher-course-modal .class-name-field{order:4;margin:0;font-size:14px}.teacher-course-modal .class-name-field input{max-width:none}
+.teacher-course-modal .class-bottom{order:5;position:sticky;bottom:-18px;background:#fff;padding:10px 0 0;margin:0;z-index:1;box-shadow:0 -8px 12px #fff}
+@media(max-width:800px){.teacher-course-modal .student-inline{grid-template-columns:minmax(100px,1fr) minmax(80px,1fr) 32px}.teacher-course-modal .inline-slots{grid-column:1/-1;grid-row:2}.teacher-course-modal .remove-student{grid-column:3;grid-row:1}.teacher-course-modal .admin-course-slot{grid-template-columns:1fr}.teacher-course-modal .admin-course-slot .help{grid-column:1}.teacher-course-modal .admin-slot-fields{flex-wrap:wrap}.teacher-course-modal .admin-slot-fields label{flex:1 1 100px}}
+@media(max-width:500px){.teacher-course-modal{padding:14px 12px}.teacher-course-modal .class-basics{gap:8px;grid-template-columns:repeat(2,minmax(0,1fr))}.teacher-course-modal .class-basics label:first-child{grid-column:1/-1}.teacher-course-modal input,.teacher-course-modal select{min-height:44px}.teacher-course-modal .class-bottom{bottom:-14px}.teacher-course-modal .inline-slot{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.week-subject{border:1px solid var(--week-line);border-radius:9px;overflow:hidden;margin-bottom:22px;background:var(--week-bg);color:var(--week-ink)}
+.week-subject>h3{padding:13px 18px;background:var(--week-head);border-bottom:1px solid var(--week-line);font-size:19px}
+.week-teacher+.week-teacher{border-top:3px solid var(--week-line)}
+.week-teacher-heading{display:flex;align-items:center;gap:16px;padding:14px 18px;background:var(--week-bg)}
+.week-teacher-heading strong{font-size:18px}.week-teacher-heading>span{color:var(--week-muted);font-size:15px}.week-teacher-heading>span:last-child{margin-left:auto}
+.week-scroll{overflow:auto;isolation:isolate}
+.week-grid{border-collapse:separate;border-spacing:0;width:100%;min-width:1220px;table-layout:fixed;color:var(--week-ink)}
+.week-grid th,.week-grid td{border:0;border-right:1px solid var(--week-line);border-bottom:1px solid var(--week-line);padding:9px;vertical-align:top;white-space:normal}
+.week-grid thead th{position:sticky;top:0;z-index:2;background:var(--week-head);text-align:center;padding:13px 8px;color:var(--week-ink);font-size:16px}
+.week-grid th:first-child{width:132px;position:sticky;left:0;background:var(--week-head);z-index:1}
+.week-grid thead th:first-child{z-index:3}
+.week-grid tbody th{padding:20px 10px;text-align:center;vertical-align:middle}.week-grid tbody th span{display:block;font-size:14px;margin-top:8px;font-weight:400;white-space:nowrap}
+.week-grid tbody td{height:116px;background:var(--week-bg)}
+.week-grid tr:hover td{background:var(--week-bg)}
+.week-lesson{background:var(--week-card);border:1px solid var(--week-line);border-left:3px solid #408c76;border-radius:5px;padding:10px;overflow-wrap:anywhere;line-height:1.65;font-size:15px}
+.week-lesson+.week-lesson{margin-top:9px}.week-lesson>strong{display:block;font-size:16px;margin-bottom:4px}.week-lesson>span{display:block;color:var(--week-muted);font-size:14px}.week-lesson .week-students{color:var(--week-ink);font-size:16px;line-height:1.8;margin:7px 0 0}
+.week-lesson.has-conflict{border-left-color:#bd5a28}.week-lesson .week-notice,.week-conflict{color:var(--week-warn);font-size:14px;margin-top:8px}.week-lesson .week-time-missing{font-size:13px;margin-top:5px}.week-conflict summary{font-weight:600;text-decoration:underline;text-underline-offset:3px}.week-conflict p{font-size:14px}
+.week-unassigned{padding:14px 18px;border:1px solid var(--week-line);border-radius:8px;color:var(--week-muted);background:var(--week-bg)}
+:root[data-admin-theme="warcraft"] .week-overview{--week-bg:#20282f;--week-ink:#e8e2d4;--week-line:#63563f;--week-head:#36382e;--week-card:#29343a;--week-muted:#c3beae;--week-warn:#f1bd77}
+@media(max-width:700px){.week-grid{min-width:1170px}.week-grid th:first-child{width:120px}.week-overview>.section-title{align-items:flex-start}.week-overview .help{font-size:14px}}
+.class-editor .student-inline,.admin-course-modal .student-inline,.teacher-course-modal .student-inline{grid-template-columns:minmax(140px,1fr) minmax(90px,.5fr) 36px;max-width:650px}
+.class-editor .summary-student{grid-template-columns:minmax(100px,1fr) minmax(90px,1fr)}
+.class-shared-slot{font-size:15px;color:#405b4d;margin-bottom:8px}

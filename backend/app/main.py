@@ -247,27 +247,37 @@ def get_class(id:ObjectId,user=Depends(teacher),db=Depends(get_db)): return clas
 def save_class(db,c,body,user,new=False):
     dictionary(db,body.subject_id,'subject',allow_deleted=not new and c.subject_id==body.subject_id)
     if not new and (body.version is None or body.version!=c.version): raise HTTPException(409,'班级已被其他页面修改，请刷新后重试（未保存内容请先复制）')
-    grades=[]
+    grades=[];resolved=[]
+    previous_slot=class_json(c)['class_slot'] if not new else None
+    shared=body.class_slot or (Slot(**previous_slot) if previous_slot else None)
     for member in body.students:
-        student=db.get(Student,member.student_id)
+        if member.new_student:
+            grade_check(db,member.new_student.grade)
+            student=Student(**member.new_student.model_dump(),campus_id=c.campus_id)
+            db.add(student)
+            # Flush only after the new class has its required fields below.
+        else:student=db.get(Student,member.student_id)
         if not student: raise HTTPException(422,'学生档案不存在')
         if student.grade not in grades: grades.append(student.grade)
+        resolved.append((member,student))
     c.display_name=body.display_name; c.grade=' / '.join(grades); c.capacity=body.capacity; c.subject_id=body.subject_id; c.updated_at=now()
     c.name_is_manual=body.name_is_manual
-    if not c.name_is_manual and body.students:
-        slot=body.students[0].weekly_slots[0]
+    if not c.name_is_manual and shared:
+        slot=shared
         c.display_name=f"周{'一二三四五六日'[slot.weekday-1]}{'一二三四五六'[slot.slot_number-1]}档"
     if not new: c.version+=1
-    # Schedules now belong to each student's enrollment. Old class slots are retired.
-    c.slots=[]
-    existing={e.student_id:e for e in c.enrollments}; keep={m.student_id for m in body.students}
+    c.slots=[WeeklySlot(weekday=shared.weekday,slot_label=f'第{shared.slot_number}档',start_time=shared.start_time,end_time=shared.end_time)] if shared else []
+    db.flush()
+    for member,student in resolved:
+        if member.new_student:audit(db,user,'student.create','student',student.id)
+    existing={e.student_id:e for e in c.enrollments}; keep={student.id for _,student in resolved}
     for e in list(c.enrollments):
         if e.student_id not in keep:
             c.enrollments.remove(e); audit(db,user,'enrollment.remove','class',c.id,{'student_id':e.student_id})
-    for m in body.students:
-        e=existing.get(m.student_id)
+    for m,student in resolved:
+        e=existing.get(student.id)
         if not e:
-            e=Enrollment(student_id=m.student_id); c.enrollments.append(e)
+            e=Enrollment(student_id=student.id); c.enrollments.append(e)
             e.evaluation=Evaluation(level=m.level,note=m.note,updated_by=user.id)
         elif e.evaluation.level!=m.level or e.evaluation.note!=m.note:
             e.evaluation.level=m.level; e.evaluation.note=m.note; e.evaluation.updated_at=now(); e.evaluation.updated_by=user.id
@@ -288,6 +298,43 @@ async def delete_class(id:ObjectId,confirmed:bool=False,version:int|None=None,us
     if not confirmed: raise HTTPException(422,'请明确确认删除')
     if version!=c.version: raise HTTPException(409,'班级已更新，请刷新后再删除')
     audit(db,user,'class.delete','class',id,{'student_ids':[e.student_id for e in c.enrollments]}); db.delete(c); db.commit(); await notify('data.updated',[user.id]); return {'ok':True}
+def managed_class(db,id):
+    c=db.get(ClassRoom,id)
+    owner=db.get(User,c.teacher_id) if c else None
+    if not c or not owner or owner.role!='teacher' or owner.deleted_at:
+        raise HTTPException(404,'班级或教师不存在')
+    return c,owner
+
+@app.get('/api/admin/classes/{id}')
+def admin_get_class(id:ObjectId,user=Depends(admin),db=Depends(get_db)):
+    consistent_read(db)
+    c,owner=managed_class(db,id)
+    return class_json(c)|{'teacher':teacher_json(owner)}
+
+@app.post('/api/admin/classes')
+async def admin_create_class(body:AdminClassIn,user=Depends(admin),db=Depends(get_db)):
+    write(db)
+    owner=db.get(User,body.teacher_id)
+    if not owner or owner.role!='teacher' or owner.deleted_at: raise HTTPException(422,'请选择有效教师')
+    dictionary(db,owner.campus_id,'campus')
+    c=ClassRoom(teacher_id=owner.id,campus_id=owner.campus_id);db.add(c)
+    with db.no_autoflush: save_class(db,c,body,user,new=True)
+    db.commit();await notify('data.updated',[owner.id]);return class_json(c)
+
+@app.patch('/api/admin/classes/{id}')
+async def admin_update_class(id:ObjectId,body:AdminClassIn,user=Depends(admin),db=Depends(get_db)):
+    write(db);c,owner=managed_class(db,id)
+    if body.teacher_id!=owner.id: raise HTTPException(422,'不能通过班级编辑变更任课教师，请重新打开对应教师的档位')
+    save_class(db,c,body,user);db.commit();await notify('data.updated',[owner.id]);return class_json(c)
+
+@app.delete('/api/admin/classes/{id}')
+async def admin_delete_class(id:ObjectId,confirmed:bool=False,version:int|None=None,user=Depends(admin),db=Depends(get_db)):
+    write(db);c,owner=managed_class(db,id)
+    if not confirmed: raise HTTPException(422,'请明确确认删除')
+    if version!=c.version: raise HTTPException(409,'班级已更新，请重新打开后再删除')
+    audit(db,user,'class.delete','class',id,{'student_ids':[e.student_id for e in c.enrollments],'teacher_id':owner.id})
+    db.delete(c);db.commit();await notify('data.updated',[owner.id]);return {'ok':True}
+
 @app.get('/api/broadcasts/current')
 def current_broadcasts(user=Depends(current_user),db=Depends(get_db)):
     rows=db.query(Broadcast).filter(Broadcast.deadline_at>now(),Broadcast.starts_at<=now(),Broadcast.closed_at.is_(None)).order_by(Broadcast.id.desc()).all()

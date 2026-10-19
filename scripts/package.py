@@ -2,20 +2,13 @@
 from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 import hashlib, json, argparse
+from release_files import release_files
 root=Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser(description='生成不含运行数据的交付包')
 parser.add_argument('--output',type=Path,default=root.parent/'EduPulse-1.2.2-Windows.zip')
 out=parser.parse_args().output.resolve()
 out.parent.mkdir(parents=True,exist_ok=True)
-excluded={'.venv','.test-venv','.npm-cache','node_modules','__pycache__','.pytest_cache','.git','browser-tools','scratch-data','backups','exports'}
-files=[]
-for p in sorted(root.rglob('*')):
-    if not p.is_file(): continue
-    relative=p.relative_to(root)
-    if any(part in excluded or part.startswith('browser-test-data') for part in relative.parts): continue
-    if p.name=='.env' or p.suffix in ('.sqlite3','.db','.pyc','.log','.key','.pem','.tsbuildinfo') or '.sqlite3-' in p.name: continue
-    if p.name=='PACKAGE_MANIFEST.json': continue
-    files.append(p)
+files=list(release_files(root))
 manifest={str(p.relative_to(root)).replace('\\','/'):{'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in files}
 manifest_file=root/'PACKAGE_MANIFEST.json'
 manifest_file.write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')

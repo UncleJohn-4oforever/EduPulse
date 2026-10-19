@@ -71,29 +71,29 @@ def test_acceptance_weighted_occupancy_workload_and_student_dedup():
     a,ts,campus,math,eng=setup(); u,t,_=ts[0]; other=ts[1][1]
     shared=student(t,campus,'同名学生'); distinct=student(t,campus,'同名学生')
     for cap,count in [(3,1),(3,2),(3,3),(6,2),(6,4)]:
-        classroom(t,math,cap,[shared]+[student(t,campus) for _ in range(count-1)],slots=2 if cap==6 and count==4 else 1)
+        classroom(t,math,cap,[shared]+[student(t,campus) for _ in range(count-1)])
     classroom(t,math,1,[distinct]); classroom(other,eng,3,[shared])
     data=a.get('/api/admin/reports').json(); r=next(x for x in data['teachers'] if x['id']==u['id'])
     assert r['groups']['3']['rate']==pytest.approx(6/9)
     assert r['groups']['6']['rate']==pytest.approx(6/12)
     assert r['small_rate']==pytest.approx(12/21)
-    assert r['groups']['6']['weekly_lessons']==3
-    assert r['weekly_lessons']==7
+    assert r['groups']['6']['weekly_lessons']==2
+    assert r['weekly_lessons']==6
     r2=next(x for x in data['teachers'] if x['id']!=u['id']); assert r2['groups']['6']['rate'] is None
     s=next(x for x in data['students'] if x['id']==shared); assert s['subject_count']==2; assert len(s['details'])==6
     assert len([x for x in data['students'] if x['display_name']=='同名学生'])==2
     results=t.get('/api/students/search?q=同名').json(); assert set(results[0])=={'id','display_name','grade'}
     scoped=a.get(f'/api/admin/reports?subject_id={eng}').json(); assert len(scoped['teachers'])==1
 
-def test_six_capacity_four_students_two_slots_is_two_lessons():
+def test_six_capacity_four_students_one_class_is_one_lesson():
     a,ts,campus,math,_=setup(); t=ts[0][1]
-    c=classroom(t,math,6,[student(t,campus) for _ in range(4)],slots=2)
+    c=classroom(t,math,6,[student(t,campus) for _ in range(4)])
     classroom(t,math,1,[student(t,campus)])
     b=body_of(c); b['display_name']='名称任意修改'; b['students'][0]['note']='更新评价'; b['students'][0]['level']='C'
     r=t.patch(f"/api/teacher/classes/{c['id']}",json=b); assert r.status_code==200,r.text
     fresh=t.get('/api/teacher/classes').json()[0]; assert fresh['students'][0]['note']=='更新评价'; assert fresh['students'][0]['level']=='C'
     assert t.patch(f"/api/teacher/classes/{c['id']}",json=b).status_code==409
-    data=a.get('/api/admin/reports/workload').json()[0]; assert data['weekly_lessons']==3; assert data['groups']['6']['weekly_lessons']==2
+    data=a.get('/api/admin/reports/workload').json()[0]; assert data['weekly_lessons']==2; assert data['groups']['6']['weekly_lessons']==1
     b=body_of(fresh); b['capacity']=3; assert t.patch(f"/api/teacher/classes/{c['id']}",json=b).status_code==422
     b=body_of(fresh); b['students'][1]['student_id']=b['students'][0]['student_id']; assert t.patch(f"/api/teacher/classes/{c['id']}",json=b).status_code==422
 
