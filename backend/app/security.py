@@ -6,6 +6,17 @@ from .db import SessionLocal, LoginSession, User, now, Audit
 ph=PasswordHasher(time_cost=3,memory_cost=65536,parallelism=2)
 COOKIE='edupulse_session'
 def digest(value): return hashlib.sha256(value.encode()).hexdigest()
+
+def strong_password(value):
+    return 14<=len(value)<=256 and any(c.isalpha() for c in value) and any(c.isdigit() for c in value)
+
+def replace_admin_password(db,user,password,action):
+    if user.role!='admin' or not user.enabled or user.deleted_at:raise ValueError('请选择有效的教学主管账号')
+    if not strong_password(password):raise ValueError('密码须14至256位，含字母和数字')
+    user.password_hash=ph.hash(password)
+    user.session_version+=1
+    db.query(LoginSession).filter_by(user_id=user.id).delete(synchronize_session=False)
+    audit(db,user,action,'user',user.id)
 def random_password():
     alphabet='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'
     while True:

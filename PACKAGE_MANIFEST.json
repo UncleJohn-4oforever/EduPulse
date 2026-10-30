@@ -4,16 +4,16 @@
     "sha256": "536d788450d7529515264bbe85253efc29d0ff95394bc93e502ba5cd4d745a19"
   },
   ".gitignore": {
-    "bytes": 440,
-    "sha256": "aa7b9cea04195d891a2f2c4dd0a81ce0765325b62c1c2ea2a33b31ee17315fa9"
+    "bytes": 465,
+    "sha256": "7bb6602ef8b9b820840349040a6d61d1aa28848714ea7626088daa5ace578baa"
   },
   "backend/app/__init__.py": {
     "bytes": 0,
     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
   "backend/app/cli.py": {
-    "bytes": 4924,
-    "sha256": "3f089e95e43ff43b473feaccbb1a39f8e808cc1285ece7fb3a51796efb411c3c"
+    "bytes": 6877,
+    "sha256": "c3aefbbdaaf5b4ec6e2c5faa84cb34414fcfe835982629ee622794e8a41ed1e6"
   },
   "backend/app/db.py": {
     "bytes": 8951,
@@ -28,8 +28,8 @@
     "sha256": "c86ec10af244899868e524e9d2abe07a15c5c95cebe829a4d2c9c19a6280c714"
   },
   "backend/app/main.py": {
-    "bytes": 35765,
-    "sha256": "7d8f624a597c5010bfd3166424bf545a07b6b2b1fa5fbdb502d4786cb4dee110"
+    "bytes": 36842,
+    "sha256": "0a2b99b2ae548a2ecc336c4c4c3a471d1831bc83de5ff7fe1457d822890c57f3"
   },
   "backend/app/migrations.py": {
     "bytes": 9519,
@@ -44,12 +44,12 @@
     "sha256": "b7311ac931aada5c4c5149d137d347cccdb81bf4afede90c829077ed050a951c"
   },
   "backend/app/schemas.py": {
-    "bytes": 6047,
-    "sha256": "7963325acd2e9e6b7bbae9c3e44bc49dc1d5da494412958cbe4e39de5740c387"
+    "bytes": 6519,
+    "sha256": "0520ae550e24d3fc945ff94999f35f7b7161cf74b217a027d5764b0ba8fe249e"
   },
   "backend/app/security.py": {
-    "bytes": 2467,
-    "sha256": "2deb12542d74dd9aeaaf6bc23cae409d9fc8ec744e06c102e2725ad68e5d7d09"
+    "bytes": 3072,
+    "sha256": "cd024bab15140c96398129b084df81462e06ec9e01028b5c6e9ad394f96fd253"
   },
   "backend/requirements.lock.txt": {
     "bytes": 559,
@@ -66,6 +66,10 @@
   "backend/tests/test_admin_class_editing.py": {
     "bytes": 4257,
     "sha256": "11f5b6e4afd978f62bf680c208d53970edb1ea0c36058f43f10b972c2d1270a2"
+  },
+  "backend/tests/test_admin_password.py": {
+    "bytes": 4913,
+    "sha256": "d3a14ec8fb9caf076f2644bcd65a58639d49185b1ae64d486a11fdd51bb64f1e"
   },
   "backend/tests/test_atomic_class_save.py": {
     "bytes": 3727,
@@ -375,17 +379,17 @@
     "bytes": 826,
     "sha256": "0800f435e2710f2fce96255edc53e4ad3e4b28cd6187f907bd64db9ed2787a14"
   },
-  "frontend/dist/assets/index-BybikRG2.js": {
-    "bytes": 294317,
-    "sha256": "db1ed5984f7719cd76a203379163c3b0264cd5b7ce72df3003ed1b18602c734d"
+  "frontend/dist/assets/index-CLYu6ygP.css": {
+    "bytes": 68625,
+    "sha256": "f27211ca8431dcef31b106c77022753ba4d18b5c132bf7a339f90f892247d168"
   },
-  "frontend/dist/assets/index-DQrnyIFP.css": {
-    "bytes": 68239,
-    "sha256": "9649bef492439d3c8d48cc2f410db0b4d7753fc1ed4888f8b7f2ab1ce9f5df04"
+  "frontend/dist/assets/index-CVjDLUQS.js": {
+    "bytes": 296609,
+    "sha256": "02052926c7733f526424849df6a43e4339780152cf3d6b09123658b79fbf1f21"
   },
   "frontend/dist/index.html": {
     "bytes": 425,
-    "sha256": "cd2989fad7ff1f60123be342fd5eb3ff33777f7e3214719566edbefc4f671435"
+    "sha256": "d8d79100c2b97ae5f6452fd9af72eb0afd0d468f014bce76b9367ad9569aac12"
   },
   "frontend/index.html": {
     "bytes": 326,
@@ -402,6 +406,14 @@
   "frontend/postcss.config.js": {
     "bytes": 59,
     "sha256": "9199a4d20e13f66b8be9a348af182f4d14805b93b315db19f95be8432cd8301b"
+  },
+  "frontend/src/adminPassword.css": {
+    "bytes": 391,
+    "sha256": "c2803882b66f5bc4666cbc7f3b179c5bed8b3181e527e2185809fdc07d9fe5a1"
+  },
+  "frontend/src/AdminPasswordSettings.tsx": {
+    "bytes": 2557,
+    "sha256": "6487f4dd8f8591b05b63466c75f522531093c9868403bd3f8baaca87add927b6"
   },
   "frontend/src/api.ts": {
     "bytes": 1449,
@@ -432,8 +444,8 @@
     "sha256": "d2dd3eb0a60315587bb4427a2ca81604ddd3083972492ca83e188f7c09b54b6e"
   },
   "frontend/src/main.tsx": {
-    "bytes": 46277,
-    "sha256": "a155cd4d0a2064aade83094a9bcedfd139f97a3303015088635afa808b5c4041"
+    "bytes": 46454,
+    "sha256": "4f20481e9ab4e843befa316b706d378218bddf5aa2e11681da9e15cf60688953"
   },
   "frontend/src/ManualStudentMerge.tsx": {
     "bytes": 4424,
@@ -492,8 +504,8 @@
     "sha256": "af4604074462aab5f547b95fbb9eeb953b93cfada58bfb4db8bf13858603b777"
   },
   "README.md": {
-    "bytes": 15102,
-    "sha256": "b2d802922421e023c549f48d9c5729c00388d0fe207c1eec53ba11d4b100b4db"
+    "bytes": 16044,
+    "sha256": "c0237639a5026170636aa6ddbabc620ec3c111c690a6763f29e07918533351d1"
   },
   "restore.bat": {
     "bytes": 434,
@@ -506,6 +518,10 @@
   "scripts/audit-current-bugs.cjs": {
     "bytes": 6300,
     "sha256": "9ac47af5852f516cd238b1d1b5406fb70fbd3e96f028e4db68d4cc14ce55f2c6"
+  },
+  "scripts/browser-admin-password.cjs": {
+    "bytes": 3313,
+    "sha256": "5044f9339c985e7894e5c7d0ff62244d414de9890b785e5505a5ee4a577bd7a9"
   },
   "scripts/browser-appearance.cjs": {
     "bytes": 5958,
@@ -612,8 +628,8 @@
     "sha256": "e8105ecfa3d404c0f08a13edaf18c043c0bf7fd537370f063a8131efe3b39df8"
   },
   "scripts/release_files.py": {
-    "bytes": 1653,
-    "sha256": "af27f041dfb386d87e77705740692107a3c3c012909dce149e4cd07a54a4fb56"
+    "bytes": 1678,
+    "sha256": "da2eb9ce09d145c60c4923ad368167cc0bcada15986da79081b6637b2a225bdf"
   },
   "scripts/seed-browser-test.py": {
     "bytes": 875,
@@ -648,8 +664,8 @@
     "sha256": "71cb685de9ac9619e223529cce334b3d51927359beb59f8257e15fcbf1b830cd"
   },
   "使用前请先看.txt": {
-    "bytes": 2333,
-    "sha256": "0f78d9877d88372a01aa3d1bb7732e4dd93655a2fdcaf60361bda470e34d28e6"
+    "bytes": 2648,
+    "sha256": "0925c5d195f882e6991dc8a64e796eef5a6e24e673a284dd5f979c802a5c7e0f"
   },
   "开始.bat": {
     "bytes": 388,
@@ -662,6 +678,10 @@
   "重启.bat": {
     "bytes": 237,
     "sha256": "2ec4d0b4389fa4b671737934f4fa39b80c2c2856a6341121b6a06dbc4b0f3f52"
+  },
+  "重置主管密码.bat": {
+    "bytes": 536,
+    "sha256": "cdaef57ce624b49b80fc0b96212db7ff2cc05163bda16f6e35fd2f12c02a7d4c"
   },
   "首次运行.bat": {
     "bytes": 1501,

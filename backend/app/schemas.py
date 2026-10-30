@@ -13,6 +13,16 @@ class Login(Strict):
     @classmethod
     def trim_username(cls,value):
         return value.strip() if isinstance(value,str) else value
+class AdminPasswordIn(Strict):
+    model_config=ConfigDict(extra='forbid',str_strip_whitespace=False)
+    current_password: str=Field(min_length=1,max_length=256)
+    new_password: str=Field(min_length=14,max_length=256)
+    @field_validator('new_password')
+    @classmethod
+    def strong(cls,value):
+        from .security import strong_password
+        if not strong_password(value):raise ValueError('新密码须14至256位，含字母和数字')
+        return value
 class TeacherIn(Strict):
     display_name: str=Field(min_length=1,max_length=80)
     campus_id: ObjectId

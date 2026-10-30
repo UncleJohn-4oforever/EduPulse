@@ -143,6 +143,24 @@ def me(request:Request,user=Depends(current_user)): return {'user':user_json(use
 def logout(request:Request,response:Response,user=Depends(current_user),db=Depends(get_db)):
     write(db); db.delete(request.state.session); audit(db,user,'logout','user',user.id); db.commit(); response.delete_cookie(COOKIE)
     return {'ok':True}
+@app.post('/api/admin/change-password')
+async def change_admin_password(body:AdminPasswordIn,response:Response,user=Depends(admin),db=Depends(get_db)):
+    write(db)
+    key=f'admin-password:{user.id}';bucket=failures[key];current=time.monotonic()
+    while bucket and bucket[0]<current-300:bucket.popleft()
+    if len(bucket)>=5:raise HTTPException(429,'原密码尝试过多，请五分钟后重试')
+    valid=False
+    try:valid=ph.verify(user.password_hash,body.current_password)
+    except (VerificationError,InvalidHashError):pass
+    if not valid:
+        bucket.append(current);audit(db,user,'admin.password_change.failed','user',user.id);db.commit()
+        raise HTTPException(400,'原密码不正确，密码未修改')
+    if body.current_password==body.new_password:raise HTTPException(400,'新密码不能与原密码相同')
+    replace_admin_password(db,user,body.new_password,'admin.password.change')
+    db.commit();failures.pop(key,None);response.delete_cookie(COOKIE)
+    await notify('account.updated',[user.id])
+    return {'ok':True}
+
 @app.get('/api/dictionaries')
 def dictionaries(user=Depends(current_user),db=Depends(get_db)):
     settings=db.get(WorkspaceSettings,1)

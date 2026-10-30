@@ -3,12 +3,14 @@ from pathlib import Path
 from datetime import datetime
 from .db import init_db, SessionLocal, User, DATA, engine, Base
 from .migrations import SCHEMA_VERSION
-from .security import ph, audit
+from .security import ph, audit, strong_password, replace_admin_password
+from sqlalchemy import text
 
 def main():
     parser=argparse.ArgumentParser(description='EduPulse 数据管理（不提供公开默认密码）')
     sub=parser.add_subparsers(dest='command',required=True)
     p=sub.add_parser('init-admin'); p.add_argument('--username',default='admin'); p.add_argument('--name',default='教学主管')
+    p=sub.add_parser('reset-admin-password');p.add_argument('--username')
     p=sub.add_parser('backup'); p.add_argument('--output')
     p=sub.add_parser('restore'); p.add_argument('file'); p.add_argument('--confirm',action='store_true')
     sub.add_parser('init-db')
@@ -44,7 +46,27 @@ def main():
             target.execute('DELETE FROM sessions')
             target.execute('UPDATE users SET session_version=session_version+1')
         print('恢复成功。重启服务前请检查数据。'); return
+    if args.command=='reset-admin-password' and not (DATA/'edupulse.sqlite3').is_file():parser.error('未找到现有数据库，请使用原来的 Windows 用户及数据目录运行')
     init_db()
+    if args.command=='reset-admin-password':
+        with SessionLocal() as db:
+            users=db.query(User).filter_by(role='admin',enabled=True,deleted_at=None).all()
+            choices={u.username:u.display_name for u in users}
+        if not choices:parser.error('未找到有效的教学主管账号，不会创建新账号')
+        print('仅重置主管密码，已保存的教学数据保留。请在原校区主机上操作。')
+        for username,name in choices.items():print(f'主管账号：{username}（{name}）')
+        username=args.username or input('请输入要重置的主管账号：').strip()
+        if username not in choices:parser.error('请选择列表中有效的主管账号')
+        if input(f'确认重置 {username}？请再次输入该账号：').strip()!=username:parser.error('账号确认不一致，已取消')
+        password=getpass.getpass('新密码（至少14位，含字母和数字）：')
+        if not strong_password(password):parser.error('密码须14至256位，含字母和数字')
+        if password!=getpass.getpass('再次输入新密码：'):parser.error('两次密码不一致，未修改')
+        with SessionLocal() as db:
+            db.execute(text('BEGIN IMMEDIATE'))
+            user=db.query(User).filter_by(username=username,role='admin',enabled=True,deleted_at=None).first()
+            if not user:parser.error('账号状态已变化，已取消')
+            replace_admin_password(db,user,password,'admin.password.reset.local');db.commit()
+        print('主管密码已重置，旧登录已失效。请使用新密码重新登录。');return
     if args.command=='init-admin':
         if not args.username or len(args.username)>80 or not args.name or len(args.name)>80: parser.error('账号或姓名长度无效')
         with SessionLocal.begin() as db:

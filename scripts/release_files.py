@@ -2,7 +2,7 @@
 from pathlib import Path
 
 ROOT_FILES={'.env.example','README.md','使用前请先看.txt','run.py','首次运行.bat','开始.bat','start.sh',
-            '结束后台.bat','重启.bat','backup.bat','restore.bat','test.bat','.gitignore'}
+            '结束后台.bat','重启.bat','重置主管密码.bat','backup.bat','restore.bat','test.bat','.gitignore'}
 EXCLUDED={'.git','.venv','node_modules','__pycache__','.pytest_cache','exports','backups'}
 
 def release_files(root):
