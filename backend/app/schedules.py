@@ -17,7 +17,8 @@ def overlap_kind(a, b):
 
 def schedule_warnings(db, teacher_id=None):
     consistent_read(db)
-    query = db.query(ClassRoom).join(User, User.id == ClassRoom.teacher_id).filter(User.deleted_at.is_(None))
+    query = db.query(ClassRoom).join(User, User.id == ClassRoom.teacher_id).filter(
+        User.role == 'teacher', User.enabled.is_(True), User.deleted_at.is_(None))
     grouped = defaultdict(list)
     students = defaultdict(list)
     rooms = query.order_by(ClassRoom.id).all()

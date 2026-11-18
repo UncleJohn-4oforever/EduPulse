@@ -36,8 +36,8 @@ def class_json(c):
 def report(db):
     consistent_read(db)
     dictionaries={d.id:d.name for d in db.query(Dictionary)}
-    users=db.query(User).filter(User.role=='teacher',User.deleted_at.is_(None)).all()
-    classes=db.query(ClassRoom).join(User,User.id==ClassRoom.teacher_id).filter(User.deleted_at.is_(None)).order_by(ClassRoom.id).all()
+    users=db.query(User).filter(User.role=='teacher',User.enabled.is_(True),User.deleted_at.is_(None)).all()
+    classes=db.query(ClassRoom).join(User,User.id==ClassRoom.teacher_id).filter(User.role=='teacher',User.enabled.is_(True),User.deleted_at.is_(None)).order_by(ClassRoom.id).all()
     teachers=[]
     for u in users:
         owned=[c for c in classes if c.teacher_id==u.id]

@@ -319,7 +319,7 @@ async def delete_class(id:ObjectId,confirmed:bool=False,version:int|None=None,us
 def managed_class(db,id):
     c=db.get(ClassRoom,id)
     owner=db.get(User,c.teacher_id) if c else None
-    if not c or not owner or owner.role!='teacher' or owner.deleted_at:
+    if not c or not owner or owner.role!='teacher' or not owner.enabled or owner.deleted_at:
         raise HTTPException(404,'班级或教师不存在')
     return c,owner
 
@@ -333,7 +333,7 @@ def admin_get_class(id:ObjectId,user=Depends(admin),db=Depends(get_db)):
 async def admin_create_class(body:AdminClassIn,user=Depends(admin),db=Depends(get_db)):
     write(db)
     owner=db.get(User,body.teacher_id)
-    if not owner or owner.role!='teacher' or owner.deleted_at: raise HTTPException(422,'请选择有效教师')
+    if not owner or owner.role!='teacher' or not owner.enabled or owner.deleted_at: raise HTTPException(422,'请选择启用的有效教师')
     dictionary(db,owner.campus_id,'campus')
     c=ClassRoom(teacher_id=owner.id,campus_id=owner.campus_id);db.add(c)
     with db.no_autoflush: save_class(db,c,body,user,new=True)
