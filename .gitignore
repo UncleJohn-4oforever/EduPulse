@@ -19,6 +19,10 @@ browser-tools/
 *.pem
 *.key
 
+# Local administrator credentials and Office temporary files.
+*教学主管密码*
+~$*
+
 browser-test-data*/
 
 # Local runtime files and exports must never be published.
